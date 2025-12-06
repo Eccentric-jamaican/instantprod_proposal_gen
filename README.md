@@ -89,9 +89,35 @@ instantprod_proposal_gen/
 └── AGENTS.md          # Agent operating instructions
 ```
 
-## Usage
+## Usage: Proposal Workflow
 
-See individual directives in `directives/` for specific workflows.
+The system is designed for a seamless 3-step workflow: **Generate -> Deploy -> Email**.
+
+### 1. Generate Proposal
+Create a customized HTML proposal from the template.
+```bash
+python execution/generate_proposal.py --client-name "Acme Corp" --output .tmp/proposals/acme.html
+```
+
+### 2. Deploy to Cloud (Recommended)
+Deploy the proposal to **Vercel** for instant mobile/desktop access without attachments.
+```bash
+python execution/deploy_proposal.py --proposal .tmp/proposals/acme.html --client-slug acme-corp
+# Returns: https://proposal-acme-corp-xyz.vercel.app
+```
+
+### 3. Send Branded Email
+Send a "Tesla-style" dark mode email with the link.
+```bash
+python execution/send_email.py \
+  --to "client@example.com" \
+  --subject "Proposal for Acme Corp" \
+  --body "View online" \
+  --client-name "Acme Corp" \
+  --link "https://proposal-acme-corp-xyz.vercel.app"
+```
+
+See individual directives in `directives/` for advanced details.
 
 ## Key Principles
 
