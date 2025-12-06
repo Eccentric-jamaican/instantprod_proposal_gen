@@ -1,0 +1,56 @@
+{
+    "company": "InstantProd",
+    "client_name": "Acme Corporation",
+    "website": "acmecorp.com",
+    "prepared_by": "InstantProd",
+    "date": "December 6, 2025",
+    "problem": "Your current website was built 5 years ago and no longer reflects the quality of your services. Visitors leave within seconds, and you're losing potential customers to competitors with modern, professional web presence.",
+    "problem_cost": "An outdated website costs you credibility. Studies show 75% of users judge a company's credibility based on their website design alone.",
+    "opportunity": "Every day without a professional website, you're missing leads. Your competitors are capturing the customers who could have been yours.",
+    "problem_point_3": "Mobile users can't navigate your current site effectively, cutting off 60% of potential traffic.",
+    "problem_point_4": "Your brand story isn't being told. Visitors don't understand what makes you unique.",
+    "solution": "A complete digital transformation: a stunning, high-converting website that tells your story, captures leads, and positions you as the premium choice in your market.",
+    "deliverables": "Custom-designed 5-page website, mobile optimization, SEO foundation, contact forms, and analytics setup.",
+    "timeline": "2-3 weeks from kickoff to launch",
+    "why_us": [
+        {
+            "title": "Speed Without Sacrifice",
+            "body": "We deliver in days, not months. Our streamlined process means you get a premium website without the typical agency delays."
+        },
+        {
+            "title": "Results-Driven Design",
+            "body": "Every design decision is backed by conversion principles. We don't just make it pretty—we make it perform."
+        }
+    ],
+    "process_steps": [
+        {
+            "num": "01",
+            "title": "Discovery",
+            "what": "We dive deep into your brand, goals, and target audience. You share your vision, we ask the right questions.",
+            "why": "A strong foundation ensures everything we build aligns with your business objectives."
+        },
+        {
+            "num": "02",
+            "title": "Design & Build",
+            "what": "We create your custom design and build it with modern technology. You review and provide feedback.",
+            "why": "Collaboration at this stage ensures the final product exceeds your expectations."
+        },
+        {
+            "num": "03",
+            "title": "Launch & Support",
+            "what": "We deploy your site, set up analytics, and provide training. Ongoing support keeps everything running smoothly.",
+            "why": "A successful launch is just the beginning. We're here for the long term."
+        }
+    ],
+    "investment": "$2,500/mo",
+    "bank_details": "NCB Business Account | Acc: 123456789 | Branch: New Kingston",
+    "min_term_label": "Minimum Commitment",
+    "min_term_value": "3 months",
+    "invest_notes": [
+        "<strong>What's Included:</strong> Custom design, development, hosting, SSL, and monthly maintenance.",
+        "<strong>Payment Terms:</strong> First month due upon signing, subsequent months billed on the 1st.",
+        "<strong>Revisions:</strong> Up to 3 rounds of revisions included. Additional revisions at $150/hour.",
+        "<strong>Ownership:</strong> Upon full payment, you own all design assets and code. We retain portfolio rights."
+    ],
+    "signature_instruction": "By signing below, you agree to the terms outlined in this proposal and authorize InstantProd to begin work on your project."
+}

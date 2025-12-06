@@ -1,0 +1,21 @@
+# Core dependencies
+python-dotenv>=1.0.0
+
+# Google API clients
+google-auth>=2.23.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.1.1
+google-api-python-client>=2.100.0
+
+# Data processing
+pandas>=2.1.0
+openpyxl>=3.1.0
+
+# HTTP requests
+requests>=2.31.0
+
+# CLI utilities
+click>=8.1.0
+
+# Date/time utilities
+python-dateutil>=2.8.0

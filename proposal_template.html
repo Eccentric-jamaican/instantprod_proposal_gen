@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0908;
+      /* Dark base */
+      --bg-secondary: linear-gradient(135deg, #1a0f14 0%, #120816 50%, #0a080c 100%);
+      /* subtle purple/ink gradient */
+      --text: #f5f1ea;
+      /* Soft white/cream */
+      --muted: #e2d9cb;
+      /* Muted copy (higher contrast on dark) */
+      --accent: #f5e6c9;
+      /* Warm accent (CTA / highlight) */
+      --border: #2a2420;
+      /* Soft border */
+      --serif: 'Playfair Display', serif;
+      --sans: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      padding: 40px 28px;
+      line-height: 1.5;
+    }
+
+    .page {
+      max-width: 920px;
+      margin: 0 auto;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 52px rgba(0, 0, 0, 0.45);
+      padding: 20px 22px 52px;
+      border-radius: 14px;
+    }
+
+    /* HEADER / COVER */
+    header {
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+
+    .logo img {
+      height: 44px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: 72px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
+      display: inline-block;
+      padding: 8px 16px;
+      background: transparent;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      font-weight: 300;
+      border: 1px solid var(--border);
+      display: inline-block;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      margin: 0;
+    }
+
+    .meta {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      display: inline-block;
+      line-height: 1.2;
+      margin: 0;
+      padding: 0;
+      justify-self: end;
+      text-align: right;
+    }
+
+    .hero-img {
+      width: calc(100% + 44px);
+      margin: 0 -22px 72px;
+      height: 320px;
+      background: #140c0f;
+      background-image: linear-gradient(180deg, rgba(40, 22, 32, 0.55) 0%, rgba(22, 12, 20, 0.8) 100%), url('./hero_image.jpg');
+      background-size: cover;
+      background-position: center;
+      border-radius: 0;
+      border: none;
+    }
+
+    /* SECTIONS */
+    section {
+      margin-bottom: 64px;
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: 64px;
+      margin-bottom: 40px;
+      line-height: 1;
+    }
+
+    h2 strong {
+      text-transform: uppercase;
+    }
+
+    /* GRID LAYOUTS (01, 02...) */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .item {
+      margin-bottom: 18px;
+    }
+
+    .num {
+      font-family: var(--serif);
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .desc {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    mark {
+      background: var(--accent);
+      color: #0f0a09;
+      padding: 0 4px;
+    }
+
+    /* WHY US CARDS */
+    .why-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .why-text {
+      flex: 1;
+    }
+
+    .black-card {
+      background: rgba(0, 0, 0, 0.65);
+      color: var(--text);
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .black-card h3 {
+      font-family: var(--serif);
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .black-card p {
+      font-size: 14px;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    /* PROCESS TABLE */
+    .process-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .process-table th {
+      background: rgba(0, 0, 0, 0.75);
+      color: var(--text);
+      text-align: left;
+      padding: 12px 12px;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-table td {
+      padding: 16px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text);
+    }
+
+    .process-table .step-num {
+      font-family: var(--serif);
+      font-size: 32px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .process-table .step-title {
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    /* INVESTMENT */
+    .investment-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .invest-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 28px 22px;
+      background: rgba(255, 255, 255, 0.04);
+      width: min(100%, 700px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .price-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .price-row:last-child {
+      border-bottom: none;
+    }
+
+    .price-row--notes {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .price-label {
+      font-family: var(--serif);
+      font-size: 20px;
+      color: #ffffff;
+      /* Brighter white */
+      font-weight: 500;
+    }
+
+    .price-val {
+      font-family: var(--sans);
+      font-size: 19px;
+      font-weight: 700;
+      background: var(--accent);
+      color: #000000 !important;
+      /* Force black text */
+      padding: 4px 12px;
+      border-radius: 6px;
+      align-self: flex-start;
+      white-space: nowrap;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .price-note {
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: right;
+      color: #e2d9cb;
+      /* Muted but readable */
+      font-weight: 400;
+    }
+
+    .invest-notes {
+      width: min(100%, 700px);
+      margin: 32px auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+
+    .invest-notes strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .invest-notes p {
+      margin: 0;
+    }
+
+    /* SIGNATURE */
+    .signature-block {
+      margin-top: 100px;
+      border-top: 2px solid black;
+      padding-top: 40px;
+    }
+
+    .sig-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: #666;
+    }
+
+    .input-line {
+      border-bottom: 1px solid #999;
+      height: 32px;
+    }
+
+    .sig-pad-wrapper {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #signature-pad {
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      width: 100%;
+      height: 180px;
+      touch-action: none;
+    }
+
+    .sig-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    /* Primary Actions */
+    .sig-actions button {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    /* Standard button (Clear) */
+    .btn-standard {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+
+    .btn-standard:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Agree Button (Alternative Primary) */
+    .btn-agree {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-agree:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .btn-agree.active {
+      background: var(--accent);
+      color: #000;
+      cursor: default;
+    }
+
+    /* Download PDF (Primary CTA) */
+    .btn-primary {
+      background: var(--text);
+      color: #000;
+      margin-left: auto;
+      /* Push to right */
+    }
+
+    .btn-primary:hover {
+      background: #fff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .sig-status {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      min-height: 20px;
+    }
+
+    /* Stamped State (for "I Agree") */
+    .signature-pad-container {
+      position: relative;
+    }
+
+    .agreement-stamp {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-5deg);
+      border: 3px solid var(--accent);
+      color: var(--accent);
+      padding: 10px 20px;
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      pointer-events: none;
+      background: rgba(11, 9, 8, 0.9);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .agreement-stamp.visible {
+      display: block;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      body {
+        padding: 0;
+        background: var(--bg-secondary);
+        /* Match page bg */
+      }
+
+      .page {
+        padding: 24px 20px 60px;
+        width: 100%;
+        max-width: 100%;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 0;
+      }
+
+      .hero-img {
+        margin: 0 -20px 52px;
+        /* Access full width relative to page padding */
+        width: calc(100% + 40px);
+        border-radius: 0;
+      }
+
+      header {
+        gap: 10px;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
+      }
+
+      .meta {
+        justify-self: center;
+        text-align: center;
+      }
+
+      .logo img {
+        height: 38px;
+      }
+
+      h1 {
+        font-size: 46px;
+        padding: 6px 12px;
+        align-self: center;
+        text-align: center;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        padding: 6px 10px;
+        align-self: center;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 42px;
+        margin-bottom: 28px;
+      }
+
+      .hero-img {
+        height: 240px;
+        /* margin handled above */
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .process-table th,
+      .process-table td {
+        padding: 10px 8px;
+        font-size: 13px;
+      }
+
+      .process-table .step-num {
+        font-size: 24px;
+      }
+
+      .process-table .step-title {
+        font-size: 14px;
+      }
+
+      .invest-card {
+        width: 100%;
+        padding: 20px 18px;
+      }
+
+      .price-row {
+        grid-template-columns: 1fr;
+      }
+
+      .price-row--notes {
+        grid-template-columns: 1fr;
+      }
+
+      .price-note {
+        text-align: left;
+      }
+
+      .investment-section {
+        gap: 12px;
+      }
+
+      .invest-notes {
+        width: 100%;
+        margin-top: 24px;
+        gap: 14px;
+        font-size: 14px;
+      }
+
+      .sig-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      #signature-pad {
+        height: 160px;
+      }
+
+      .sig-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .sig-actions button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    /* UTILS */
+    .highlight {
+      background: var(--accent);
+      padding: 0 4px;
+    }
+
+    /* PRINT / PDF EXPORT */
+    @media print {
+      @page {
+        margin: 0;
+        size: auto;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        background-color: #0f0a09 !important;
+        /* Force dark bg */
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      .page {
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 40px !important;
+        background-color: #0f0a09 !important;
+      }
+
+      .sig-actions,
+      .sig-status,
+      #sig-status {
+        display: none !important;
+      }
+
+      section,
+      .invest-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <!-- COVER -->
+    <header>
+      <div class="topbar">
+        <div class="logo"><img src="{{LOGO_DATA_URI}}" alt="Logo"></div>
+        <div class="meta">CONFIDENTIAL | {{PREPARED_BY}} STRATEGIC INITIATIVE | {{DATE}}</div>
+      </div>
+      <h1>{{CLIENT_NAME}}</h1>
+      <br>
+      <div class="subtitle">Prepared by {{PREPARED_BY}} — {{DATE}}</div>
+    </header>
+
+    <div class="hero-img"></div>
+
+    <!-- PROBLEM -->
+    <section>
+      <h2><strong>YOUR</strong> problem areas.</h2>
+      <p style="max-width: 600px; margin-bottom: 40px; font-size: 18px;">
+        {{PROBLEM}}
+      </p>
+      <div class="grid-2">
+        <div class="item">
+          <span class="num">01</span>
+          <div class="desc"><mark>Problem cost:</mark> {{PROBLEM_COST}}</div>
+        </div>
+        <div class="item">
+          <span class="num">02</span>
+          <div class="desc"><mark>Missed opportunity:</mark> {{OPPORTUNITY}}</div>
+        </div>
+        <div class="item">
+          <span class="num">03</span>
+          <div class="desc">{{PROBLEM_POINT_3}}</div>
+        </div>
+        <div class="item">
+          <span class="num">04</span>
+          <div class="desc">{{PROBLEM_POINT_4}}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOLUTION -->
+    <section>
+      <h2><strong>YOUR</strong> solution.</h2>
+      <p style="max-width: 600px; margin-bottom: 40px;">
+        {{SOLUTION}}
+      </p>
+      <div class="grid-2">
+        <div class="item">
+          <span class="num">01</span>
+          <div class="desc"><mark>Deliverables:</mark> {{DELIVERABLES}}</div>
+        </div>
+        <div class="item">
+          <span class="num">02</span>
+          <div class="desc"><mark>Timeline:</mark> {{TIMELINE}}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY US -->
+    <section>
+      <h2><strong>WHY</strong> us?</h2>
+      <div class="why-container">
+        <div class="why-text">
+          <div class="black-card">
+            <h3>{{WHY_US_TITLE_1}}</h3>
+            <p>{{WHY_US_BODY_1}}</p>
+          </div>
+          <div class="black-card">
+            <h3>{{WHY_US_TITLE_2}}</h3>
+            <p>{{WHY_US_BODY_2}}</p>
+          </div>
+        </div>
+        <div class="why-photo"></div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section>
+      <h2><strong>WHAT</strong> working with us looks like.</h2>
+      <table class="process-table">
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>What Happens</th>
+            <th>Why It Matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="step-num">{{STEP_1_NUM}}</span><span class="step-title">{{STEP_1_TITLE}}</span></td>
+            <td>{{STEP_1_WHAT}}</td>
+            <td>{{STEP_1_WHY}}</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">{{STEP_2_NUM}}</span><span class="step-title">{{STEP_2_TITLE}}</span></td>
+            <td>{{STEP_2_WHAT}}</td>
+            <td>{{STEP_2_WHY}}</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">{{STEP_3_NUM}}</span><span class="step-title">{{STEP_3_TITLE}}</span></td>
+            <td>{{STEP_3_WHAT}}</td>
+            <td>{{STEP_3_WHY}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- INVESTMENT -->
+    <section class="investment-section">
+      <h2><strong>WHAT</strong> you're investing.</h2>
+      <div class="invest-card">
+        <div class="price-row">
+          <span class="price-label">Monthly Subscription</span>
+          <span class="price-val">{{INVESTMENT}}</span>
+        </div>
+        <div class="price-row price-row--notes">
+          <span class="price-label">Bank Details</span>
+          <span class="price-note">{{BANK_DETAILS}}</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">{{MIN_TERM_LABEL}}</span>
+          <span class="price-val">{{MIN_TERM_VALUE}}</span>
+        </div>
+      </div>
+      <div class="invest-notes">
+        <p>{{INVEST_NOTE_1}}</p>
+        <p>{{INVEST_NOTE_2}}</p>
+        <p>{{INVEST_NOTE_3}}</p>
+        <p>{{INVEST_NOTE_4}}</p>
+      </div>
+    </section>
+
+    <!-- SIGNATURE -->
+    <section class="signature-block">
+      <p style="margin-bottom: 20px;">{{SIGNATURE_INSTRUCTION}}</p>
+      <div class="sig-grid">
+        <div class="input-group">
+          <label>Client Name</label>
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <label>Title</label>
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <label>Date</label>
+          <div class="input-line"></div>
+        </div>
+      </div>
+      <div class="sig-pad-wrapper">
+        <label style="font-size:12px; text-transform:uppercase; color:#666;">Signature</label>
+
+        <div class="signature-pad-container">
+          <canvas id="signature-pad"></canvas>
+          <div class="agreement-stamp" id="agreement-stamp">AGREED via Digital Consent</div>
+        </div>
+
+        <div class="sig-actions">
+          <button type="button" class="btn-standard" id="sig-clear">Clear / Reset</button>
+          <button type="button" class="btn-agree" id="sig-agree">I Agree (No Drawing)</button>
+          <button type="button" class="btn-primary" id="sig-download-pdf">Download Signed PDF</button>
+        </div>
+        <div style="text-align:center; font-size:11px; color:#555; margin-top:8px; display:none;" id="print-hint">
+          (If download fails, use Browser Menu &rarr; Share &rarr; Print)
+        </div>
+        <script>
+           // Show hint only if likely mobile or known tricky environment? Or always?
+           // Always showing is safer for now.
+           document.getElementById('print-hint').style.display = 'block';
+        </script>
+
+        <div class="sig-status" id="sig-status"></div>
+      </div>
+    </section>
+
+    <div class="meta" style="margin-top: 40px; border: none;">
+      CONFIDENTIAL | {{PREPARED_BY}} | {{DATE}}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById('signature-pad');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      const clearBtn = document.getElementById('sig-clear');
+      const agreeBtn = document.getElementById('sig-agree');
+      const stamp = document.getElementById('agreement-stamp');
+      const status = document.getElementById('sig-status');
+
+      function resizeCanvas() {
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = canvas.clientWidth * ratio;
+        canvas.height = canvas.clientHeight * ratio;
+        ctx.scale(ratio, ratio);
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#f5e6c9';
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      let drawing = false;
+      let last = { x: 0, y: 0 };
+      let isAgreed = false;
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        if (e.touches && e.touches.length > 0) {
+          return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+        }
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      }
+
+      function start(e) {
+        if (isAgreed) return; // Disable drawing if agreed via button
+        drawing = true;
+        last = getPos(e);
+        status.textContent = 'Signing...';
+      }
+      function move(e) {
+        if (!drawing) return;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(last.x, last.y);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        last = pos;
+      }
+      function end() {
+        if (drawing) {
+          status.textContent = 'Signature recorded.';
+        }
+        drawing = false;
+      }
+
+      canvas.addEventListener('mousedown', start);
+      canvas.addEventListener('mousemove', move);
+      canvas.addEventListener('mouseup', end);
+      canvas.addEventListener('mouseleave', end);
+      canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e); });
+      canvas.addEventListener('touchmove', (e) => { e.preventDefault(); move(e); });
+      canvas.addEventListener('touchend', end);
+
+      // CLEAR / RESET
+      clearBtn?.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stamp.classList.remove('visible');
+        agreeBtn.classList.remove('active');
+        isAgreed = false;
+        status.textContent = 'Cleared. Please sign or click "I Agree".';
+      });
+
+      // I AGREE BUTTON
+      agreeBtn?.addEventListener('click', () => {
+        // Clear any drawing
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Show stamp
+        stamp.classList.add('visible');
+        agreeBtn.classList.add('active');
+        isAgreed = true;
+        status.textContent = 'Digital agreement recorded.';
+      });
+
+      // DOWNLOAD PDF
+      document.getElementById('sig-download-pdf').addEventListener('click', () => {
+        try {
+          window.print();
+        } catch (err) {
+          alert("Could not open print dialog automatically. Please select 'Print' or 'Share > Print' from your browser menu.");
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>
