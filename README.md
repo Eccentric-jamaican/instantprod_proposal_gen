@@ -117,7 +117,18 @@ python execution/send_email.py \
   --link "https://proposal-acme-corp-xyz.vercel.app"
 ```
 
-See individual directives in `directives/` for advanced details.
+### 4. Hyper-Personalization (Optional)
+Automate proposal creation from a **Fireflies.ai** transcript.
+
+1. Save transcript to `.tmp/transcript.txt`.
+2. Analyze and extract data:
+   ```bash
+   python execution/analyze_transcript.py --transcript .tmp/transcript.txt
+   ```
+3. Generate proposal from the extracted JSON:
+   ```bash
+   python execution/generate_proposal.py --client-data .tmp/transcript_data.json
+   ```
 
 ## Key Principles
 

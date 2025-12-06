@@ -474,7 +474,56 @@
       display: block;
     }
 
-    /* RESPONSIVE */
+    /* RESPONSIVE - TABLET */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      body {
+        padding: 32px 24px;
+      }
+
+      .page {
+        padding: 32px 36px 48px;
+      }
+
+      h1 {
+        font-size: 54px;
+      }
+
+      h2 {
+        font-size: 48px;
+        margin-bottom: 32px;
+      }
+
+      .hero-img {
+        height: 280px;
+        margin-bottom: 56px;
+      }
+
+      section {
+        margin-bottom: 48px;
+      }
+
+      .grid-2 {
+        gap: 20px;
+      }
+
+      .num {
+        font-size: 36px;
+      }
+
+      .invest-card {
+        padding: 24px;
+      }
+
+      .price-label {
+        font-size: 18px;
+      }
+
+      .price-val {
+        font-size: 17px;
+      }
+    }
+
+    /* RESPONSIVE - MOBILE */
     @media (max-width: 768px) {
       body {
         padding: 0;
@@ -522,10 +571,13 @@
       }
 
       h1 {
-        font-size: 46px;
+        font-size: 36px;
+        line-height: 1.1;
         padding: 6px 12px;
         align-self: center;
         text-align: center;
+        word-wrap: break-word;
+        max-width: 100%;
       }
 
       .subtitle {
@@ -536,13 +588,18 @@
       }
 
       h2 {
-        font-size: 42px;
-        margin-bottom: 28px;
+        font-size: 32px;
+        margin-bottom: 20px;
+        line-height: 1.1;
+      }
+
+      section {
+        margin-bottom: 40px;
       }
 
       .hero-img {
-        height: 240px;
-        /* margin handled above */
+        height: 200px;
+        margin-bottom: 40px;
       }
 
       .grid-2 {
@@ -550,18 +607,46 @@
         gap: 18px;
       }
 
-      .process-table th,
+      .process-table,
+      .process-table tbody,
+      .process-table tr,
       .process-table td {
-        padding: 10px 8px;
-        font-size: 13px;
+        display: block;
+        width: 100%;
+      }
+
+      .process-table thead {
+        display: none;
+      }
+
+      .process-table tr {
+        margin-bottom: 24px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .process-table td {
+        border-bottom: none;
+        padding: 0 0 12px;
+      }
+
+      .process-table td:last-child {
+        padding-bottom: 0;
       }
 
       .process-table .step-num {
         font-size: 24px;
+        margin-bottom: 4px;
+        color: var(--accent);
       }
 
       .process-table .step-title {
-        font-size: 14px;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
       }
 
       .invest-card {
@@ -780,7 +865,7 @@
         </div>
         <div class="price-row price-row--notes">
           <span class="price-label">Bank Details</span>
-          <span class="price-note">{{BANK_DETAILS}}</span>
+          <span class="price-note">Scotiabank<br>Name: Addis Ellis<br>Account: 90175 000853932<br>Transit: 90175</span>
         </div>
         <div class="price-row">
           <span class="price-label">{{MIN_TERM_LABEL}}</span>
@@ -829,9 +914,9 @@
           (If download fails, use Browser Menu &rarr; Share &rarr; Print)
         </div>
         <script>
-           // Show hint only if likely mobile or known tricky environment? Or always?
-           // Always showing is safer for now.
-           document.getElementById('print-hint').style.display = 'block';
+          // Show hint only if likely mobile or known tricky environment? Or always?
+          // Always showing is safer for now.
+          document.getElementById('print-hint').style.display = 'block';
         </script>
 
         <div class="sig-status" id="sig-status"></div>

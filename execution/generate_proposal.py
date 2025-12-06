@@ -117,7 +117,8 @@ def build_placeholder_map(data: Dict[str, Any], logo_path: Optional[Path] = None
     
     # Solution section
     placeholders['SOLUTION'] = escape_html(data.get('solution', ''))
-    placeholders['DELIVERABLES'] = escape_html(data.get('deliverables', ''))
+    # Don't escape - intentionally contains HTML like <br>
+    placeholders['DELIVERABLES'] = str(data.get('deliverables', ''))
     placeholders['TIMELINE'] = escape_html(data.get('timeline', ''))
     
     # Why Us section
@@ -154,7 +155,8 @@ def build_placeholder_map(data: Dict[str, Any], logo_path: Optional[Path] = None
     
     # Investment section
     placeholders['INVESTMENT'] = escape_html(data.get('investment', ''))
-    placeholders['BANK_DETAILS'] = escape_html(data.get('bank_details', ''))
+    # Don't escape - intentionally contains HTML like <br>
+    placeholders['BANK_DETAILS'] = str(data.get('bank_details', ''))
     placeholders['MIN_TERM_LABEL'] = escape_html(data.get('min_term_label', 'Minimum Term'))
     placeholders['MIN_TERM_VALUE'] = escape_html(data.get('min_term_value', ''))
     
