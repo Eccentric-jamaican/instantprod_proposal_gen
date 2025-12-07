@@ -1,0 +1,188 @@
+export default function PrivacyPage() {
+  return (
+    <main className="bg-[#0f0c09] text-white">
+      <section className="border-b border-white/10">
+        <div className="mx-auto max-w-5xl px-4 md:px-8 py-20 text-center">
+          <div className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-wide text-white/70">
+            Instantprod
+          </div>
+          <h1 className="mt-6 text-3xl md:text-5xl font-semibold tracking-tight">Privacy Policy</h1>
+          <p className="mt-3 text-sm text-white/60">Effective date: 2 Nov 2025</p>
+        </div>
+      </section>
+
+      <section>
+        <div className="mx-auto max-w-4xl px-4 md:px-8 py-16 md:py-24">
+          <div className="space-y-8 text-sm md:text-base leading-relaxed text-white/80 [&_h2]:mt-10 [&_h2:first-of-type]:mt-0 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-white [&_strong]:text-white">
+            <div className="space-y-3">
+              <h2>Instantprod — Privacy Policy</h2>
+              <p className="text-white/70">Who we are: Instantprod (“we”, “us”) provides subscription web development and site management services (“Services”).</p>
+              <p className="text-white/70">How to contact us: <a className="underline" href="mailto:support@instantprod.dev">support@instantprod.dev</a></p>
+              <p>This Privacy Policy explains how we collect, use, share, and protect personal data in connection with our website and Services. It works together with our Terms &amp; Conditions.</p>
+              <p>B2B only: We provide Services to business customers. If you are using our Services for personal, family, or household purposes, please do not submit personal data.</p>
+            </div>
+
+            <h2>1) Roles &amp; Scope</h2>
+            <p>
+              When we run our own website, billing, sales, and support, we act as a data controller.
+              <br />
+              When we manage a client website or process leads on your behalf (e.g., routing form submissions into your CRM), we act as your data processor and will sign a Data Processing Addendum (DPA) on request.
+              <br />
+              This Policy covers: instantprod.dev, client onboarding forms, and our delivery workflow tools (e.g., Trello). It does not cover third-party sites we don’t control; review those providers’ policies separately.
+            </p>
+
+            <h2>2) Data We Collect</h2>
+            <p><strong>2.1 You provide directly</strong></p>
+            <p>
+              Account/Billing: name, business email, company, role, billing email, VAT/GCT info.
+              <br />
+              Content for work: copy, images, design briefs, technical access (e.g., GitHub/Vercel invitations).
+              <br />
+              Support/Comms: messages, attachments, feedback.
+            </p>
+            <p><strong>2.2 Collected automatically (website/app telemetry)</strong></p>
+            <p>
+              Usage data: pages viewed, timestamps, referrers, device/browser, approximate location (city/region).
+              <br />
+              Identifiers: IP address, cookie IDs or equivalent.
+              <br />
+              Campaign/UTM data: utm_source, utm_medium, etc., if present on your visit.
+            </p>
+            <p><strong>2.3 From third parties (as allowed by you)</strong></p>
+            <p>
+              Payment status and identifiers from Stripe.
+              <br />
+              Workspace metadata from tools you connect (e.g., Vercel/Netlify, GitHub, Trello, your CRM).
+            </p>
+
+            <h2>3) Why We Use Data (Purposes)</h2>
+            <p>
+              Provide the Services and operate your work queue (Backlog → Active → Approval).
+              <br />
+              Account &amp; Billing (subscriptions, invoicing, fraud prevention).
+              <br />
+              Support &amp; Service notices (SLA updates, pausing/resuming, security alerts).
+              <br />
+              Product improvement &amp; analytics (aggregate usage trends).
+              <br />
+              Legal &amp; compliance (tax, accounting, security, dispute handling).
+              <br />
+              Marketing to businesses who have expressed interest (you can opt out anytime).
+            </p>
+
+            <h2>4) Legal Bases (high-level)</h2>
+            <p>
+              We process data under one or more of the following:
+              <br />
+              Contract (to deliver the Services you subscribed to)
+              <br />
+              Legitimate interests (security, analytics, product improvement, B2B marketing)
+              <br />
+              Consent (where required—e.g., certain cookies/marketing in some regions)
+              <br />
+              Legal obligations (tax, fraud prevention, record-keeping)
+            </p>
+
+            <h2>5) Cookies &amp; Analytics</h2>
+            <p>
+              We use privacy-respecting analytics (e.g., GA4 and/or Plausible).
+              <br />
+              Cookies or similar tech may store session/UTM info and basic diagnostics.
+              <br />
+              You can set your browser to block cookies; some features may not work.
+              <br />
+              We don’t sell your personal data. We don’t run interest-based ads on our site.
+              <br />
+              If you need a detailed cookie list for compliance, email <a className="underline" href="mailto:support@instantprod.dev">support@instantprod.dev</a>.
+            </p>
+
+            <h2>6) Sharing Your Data</h2>
+            <p>
+              We share personal data only with:
+              <br />
+              Service providers / processors that help us run Instantprod (e.g., Stripe for payments; Vercel/Netlify/Cloudflare for hosting; GitHub; Trello; email/CRM tools; analytics).
+              <br />
+              Professional advisors (legal, accounting) under confidentiality.
+              <br />
+              Authorities when required by law.
+              <br />
+              Business transfers (e.g., merger or acquisition).
+              <br />
+              We remain responsible for processors acting on our instructions. We do not sell personal data.
+            </p>
+
+            <h2>7) International Transfers</h2>
+            <p>
+              We may store or process data outside Jamaica (e.g., the USA/EU). When we transfer personal data internationally, we use appropriate safeguards (such as Standard Contractual Clauses or equivalent contractual protections).
+            </p>
+
+            <h2>8) Data Retention</h2>
+            <p>
+              We keep data only as long as needed for the purposes in this Policy, to perform a contract, or to meet legal obligations.
+              <br />
+              Operational logs/analytics are kept for a limited period and then aggregated or deleted.
+              <br />
+              You can ask us to delete data we control, subject to legal/operational exceptions.
+            </p>
+
+            <h2>9) Security</h2>
+            <p>
+              We use reasonable technical and organizational measures: least-privilege access, encrypted transport, access reviews, and recommended two-factor authentication for shared tools. No method is 100% secure; we can’t guarantee absolute security.
+            </p>
+
+            <h2>10) Your Rights</h2>
+            <p>
+              Depending on the law that applies to you (including Jamaica’s Data Protection Act), you may have rights to:
+              <br />
+              Access your personal data we control
+              <br />
+              Rectify inaccurate or incomplete data
+              <br />
+              Erase data (when no longer needed and not legally required to retain)
+              <br />
+              Restrict or object to certain processing
+              <br />
+              Portability (receive your data in a usable format)
+              <br />
+              Withdraw consent where processing relies on consent
+            </p>
+            <p>
+              To exercise any rights or make a complaint, email <a className="underline" href="mailto:support@instantprod.dev">support@instantprod.dev</a>. You may also contact the Information Commissioner (Jamaica). We’ll respond within a reasonable time.
+              <br />
+              If we act as your processor (for your site/lead data): Please direct requests to your organization; we’ll assist as required by our DPA.
+            </p>
+
+            <h2>11) Payments</h2>
+            <p>
+              We use Stripe for payments. We don’t store card numbers on our servers. Stripe processes payment data under its own terms and privacy notice. See <a className="underline" href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer">https://stripe.com/privacy</a>.
+            </p>
+
+            <h2>12) Links to Other Sites</h2>
+            <p>
+              Our website may link to third-party sites. We don’t control their content or privacy practices. Review their policies before sharing information.
+            </p>
+
+            <h2>13) Children</h2>
+            <p>
+              Our Services are for business use and not directed to children. We don’t knowingly collect personal data from children. If you believe a child provided personal data, contact us and we’ll delete it.
+            </p>
+
+            <h2>14) Changes to This Policy</h2>
+            <p>
+              We may update this Policy from time to time. If we make material changes, we’ll update the Effective date and, where appropriate, provide additional notice. Your continued use of the Services after changes means you accept the updated Policy.
+            </p>
+
+            <h2>15) Contact Us</h2>
+            <p>
+              Instantprod
+              <br />
+              Email: <a className="underline" href="mailto:support@instantprod.dev">support@instantprod.dev</a>
+              <br />
+              Address: 2 Upper Elleston Road, Kingston CSO
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}

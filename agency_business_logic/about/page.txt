@@ -1,0 +1,56 @@
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+
+export default function AboutPage() {
+  return (
+    <main className="bg-[#0f0c09] text-white min-h-screen pt-32 pb-24 px-4 md:px-8">
+      <div className="max-w-2xl">
+        {/* Hero */}
+        <section className="space-y-8">
+          <h1 className="text-2xl md:text-3xl font-medium leading-[1.4] tracking-tight">
+            We help small teams ship big ideas—fast.
+          </h1>
+          
+          <div className="space-y-6 text-white/60 text-base leading-relaxed">
+            <p>
+              Instantprod is a productized design and development studio. We work with founders, 
+              startups, and growing teams who need reliable execution without the overhead of 
+              hiring in-house.
+            </p>
+            <p>
+              You own everything—the code, the repo, the IP. We build on your infrastructure 
+              so you're never locked in.
+            </p>
+          </div>
+        </section>
+
+        {/* Stats - inline */}
+        <section className="mt-16 flex flex-wrap gap-x-12 gap-y-6">
+          <div>
+            <p className="text-3xl font-medium text-white">48h</p>
+            <p className="text-sm text-white/40 mt-1">Avg. turnaround</p>
+          </div>
+          <div>
+            <p className="text-3xl font-medium text-white">100+</p>
+            <p className="text-sm text-white/40 mt-1">Projects shipped</p>
+          </div>
+          <div>
+            <p className="text-3xl font-medium text-white">0</p>
+            <p className="text-sm text-white/40 mt-1">Lock-in contracts</p>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="mt-16 pt-12 border-t border-white/10">
+          <Link 
+            href="/contact"
+            className="inline-flex items-center gap-2 text-white hover:text-white/80 transition-colors group"
+          >
+            <span className="text-base font-medium">Book a call</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </section>
+      </div>
+    </main>
+  )
+}

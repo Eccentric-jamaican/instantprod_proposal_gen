@@ -13,7 +13,13 @@ sys.path.insert(0, str(PROJECT_ROOT))
 load_dotenv()
 
 SYSTEM_PROMPT = """
-You are an expert sales engineer. Your goal is to extract structured data from a transcript to populate a high-design HTML proposal.
+You are an expert sales engineer. Your goal is to extract structured data from a transcript to populate a high-design HTML proposal for Instantprod, a B2B subscription web design and development studio.
+
+Business context (for consistency only; do not restate full legal text):
+- Instantprod works with founders and small teams on a flat monthly subscription.
+- Clients own their code, repos, and infrastructure; there is no vendor lock-in.
+- Work is delivered on the client's stack as an independent contractor.
+- Client and lead data is handled under our Privacy Policy and Data Processing terms; we do not sell personal data.
 
 CRITICAL: You must output PURE JSON. No markdown. No `json` wrappers.
 
@@ -24,7 +30,17 @@ Guardrails for UI Integrity:
    - `why_us`: MUST have exactly 2 items.
    - `invest_notes`: MUST have exactly 4 short bullet points.
 3. **Cleaning**: Do NOT use markdown bolding (e.g. `**text**`). Use HTML `<strong>` if absolutely necessary, but prefer plain text.
-4. **Defaults**: If information (like budget) is missing, use "TBD" or "Custom Quote". Do not hallucinate numbers.
+4. **Defaults & Pricing**:
+   - Never hallucinate numeric prices or budgets.
+   - Always map the call to one flat monthly plan where possible by setting `investment` to **one** of:
+       * "Starter subscription - flat monthly plan"
+       * "Growth subscription - flat monthly plan"
+       * "Strategic Partner subscription - flat monthly plan"
+   - Use these heuristics:
+       * Starter: small team, single brand, mainly marketing site or simple product site, light forms, no multi-portal or heavy integrations.
+       * Growth: growing team or multiple stakeholders, ongoing backlog/experiments, multiple brands/seats, or recurring CRO/feature work on an existing product site.
+       * Strategic Partner: complex build such as multi-portal or multi-tenant apps, enterprise RFPs, logistics/operations portals, significant back-end work, or multiple deep integrations (e.g. CRM/ERP, real-time tracking, vendor/carrier portals).
+   - Only if the transcript is genuinely too ambiguous to decide, set `investment` to "Flat monthly subscription - plan to be confirmed".
 
 SCHEMA & CONSTRAINTS:
 {
@@ -34,7 +50,7 @@ SCHEMA & CONSTRAINTS:
   "website": "Inferred URL",
   
   "problem": "MAX 30 words. Core pain point.",
-  "problem_cost": "MAX 5 words. E.g. '$50k/year' or 'Unknown'.",
+  "problem_cost": "MAX 5 words. Only use a numeric amount if the transcript explicitly states one; otherwise use 'Unknown'.",
   "opportunity": "MAX 20 words. The positive outcome.",
   "problem_point_3": "MAX 5 words. Very short label.",
   "problem_point_4": "MAX 5 words. Very short label.",
@@ -54,7 +70,7 @@ SCHEMA & CONSTRAINTS:
     {"num": "03", "title": "Max 3 words", "what": "Max 5 words", "why": "Max 10 words"}
   ],
   
-  "investment": "Total Cost (e.g. '$15,000').",
+  "investment": "One of the plan strings above (Starter/Growth/Strategic Partner) or 'Flat monthly subscription - plan to be confirmed' (no numeric amounts).",
   "bank_details": "Scotiabank<br>Name: Addis Ellis<br>Account: 90175 000853932<br>Transit: 90175",
   "min_term_label": "Timeline",
   "min_term_value": "Duration",
@@ -62,8 +78,8 @@ SCHEMA & CONSTRAINTS:
   "invest_notes": [
     "Short note 1 (Max 10 words)",
     "Short note 2 (Max 10 words)",
-    "Short note 3",
-    "Short note 4"
+    "Short note 3 (Max 10 words)",
+    "Short note 4 (Max 10 words)"
   ],
   
   "signature_instruction": "Please sign below to execute this agreement."
@@ -72,7 +88,7 @@ SCHEMA & CONSTRAINTS:
 
 @click.command()
 @click.option('--transcript', required=True, type=click.Path(exists=True), help='Path to transcript text file')
-@click.option('--model', default='gpt-4o', help='OpenAI model to use')
+@click.option('--model', default='gpt-5-nano', help='OpenAI model to use')
 @click.option('--output', default=None, help='Output JSON path')
 def main(transcript, model, output):
     """Analyze transcript and generate proposal data JSON."""
@@ -100,8 +116,7 @@ def main(transcript, model, output):
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": f"Here is the transcript:\n\n{transcript_text}"}
-            ],
-            temperature=0.7
+            ]
         )
         
         content = response.choices[0].message.content.strip()

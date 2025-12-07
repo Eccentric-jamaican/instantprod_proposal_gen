@@ -1,0 +1,66 @@
+export type BillingInterval = "monthly" | "yearly"
+
+export interface PricingPlan {
+  name: string
+  subtitle: string
+  price: Record<BillingInterval, number>
+  jmd: Record<BillingInterval, number>
+  description: string
+  features: string[]
+  cta: string
+  highlighted: boolean
+  badge?: string
+}
+
+export const plans: PricingPlan[] = [
+  {
+    name: "Starter",
+    subtitle: "(4-Day)",
+    price: { monthly: 550, yearly: 495 },
+    jmd: { monthly: 85000, yearly: 76500 },
+    description: "Included",
+    features: [
+      "One request at a time",
+      "Avg. 4 business day delivery",
+      "Unlimited requests, no page limits",
+      "Client-owned hosting & code",
+      "Pause anytime",
+    ],
+    cta: "Join now",
+    highlighted: false,
+  },
+  {
+    name: "Growth",
+    subtitle: "(48-Hour)",
+    price: { monthly: 1550, yearly: 1395 },
+    jmd: { monthly: 240000, yearly: 216000 },
+    description: "Included",
+    features: [
+      "One request at a time",
+      "Avg. 48-hour delivery + priority queue",
+      "Automations & CRM included",
+      "1 landing page/month",
+      "Up to 5 users, multi-brand",
+      "Pause anytime",
+    ],
+    cta: "Join now",
+    highlighted: true,
+    badge: "Recommended",
+  },
+  {
+    name: "Strategic Partner",
+    subtitle: "",
+    price: { monthly: 4200, yearly: 3780 },
+    jmd: { monthly: 650000, yearly: 585000 },
+    description: "Included",
+    features: [
+      "Weekly strategy (fractional digital lead)",
+      "CRO tests, advanced automations, dashboards",
+      "Priority access",
+      "Optional KPI guarantee",
+      "Seats/brands as needed",
+    ],
+    cta: "Join now",
+    highlighted: false,
+  },
+]

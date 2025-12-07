@@ -1,0 +1,161 @@
+export default function TermsPage() {
+  return (
+    <main className="bg-[#0f0c09] text-white">
+      <section className="border-b border-white/10">
+        <div className="mx-auto max-w-5xl px-4 md:px-8 py-20 text-center">
+          <div className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-wide text-white/70">
+            Instantprod
+          </div>
+          <h1 className="mt-6 text-3xl md:text-5xl font-semibold tracking-tight">Terms &amp; Conditions</h1>
+          <p className="mt-3 text-sm text-white/60">Last updated: 2 Nov 2025</p>
+        </div>
+      </section>
+
+      <section>
+        <div className="mx-auto max-w-4xl px-4 md:px-8 py-16 md:py-24">
+          <div className="space-y-8 text-sm md:text-base leading-relaxed text-white/80 [&_h2]:mt-10 [&_h2:first-of-type]:mt-0 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-white [&_strong]:text-white">
+            <h2>1) Business Use Only</h2>
+            <p>You confirm you are acquiring the Services solely for business purposes (B2B) and are not a “consumer” under the Jamaica Consumer Protection Act.</p>
+
+            <h2>2) Service Model &amp; Workflow</h2>
+            <p><strong>1.1 Scope.</strong> You may submit unlimited requests. We work one Active request at a time on a shared Trello board (Backlog → Active → Approval).</p>
+            <p><strong>1.2 No page limits.</strong> Request as many pages over time as you like. Larger/complex work is split into sequential Active cycles (no extra fees—just scheduled).</p>
+            <p>
+              <strong>1.3 Standard vs. Large/Epic.</strong>
+              <br />• Standard (fits plan SLA): copy/visual updates, a new page using existing components, simple forms.
+              <br />• Large/Epic: new templates/themes, multi-section landing pages, multi-step forms, complex CMS/data models, custom back-end. We split these into multiple Active cycles; the SLA applies per cycle.
+            </p>
+            <p><strong>1.4 Communication.</strong> Async by default (Trello comments/email). Meetings only if mutually agreed.</p>
+            <p><strong>1.5 Business days/timezone.</strong> “Business day” = Mon–Fri, America/Jamaica time. Weekends/Jamaica public holidays excluded.</p>
+
+            <h2>3) Turnaround (SLA)</h2>
+            <p><strong>2.1 Starter:</strong> delivery up to 4 business days per Standard request (after the card is moved to Active with required inputs/access).</p>
+            <p><strong>2.2 Growth:</strong> delivery ~48 hours (2 business days) per Standard request (same conditions).</p>
+            <p><strong>2.3 Strategic Partner:</strong> timelines defined in a Statement of Work (SOW).</p>
+            <p>
+              <strong>2.4 Clock rules.</strong> SLA starts when a request is in Active and we have all inputs/access; stops when we deliver a workable version into Approval. Waiting on you pauses the clock.
+            </p>
+            <p><strong>2.5 Emergency triage.</strong> Production-down issues: triage within 2 business hours; hotfix target within 4 (best-effort).</p>
+
+            <h2>4) Pausing, Banking &amp; Reactivation</h2>
+            <p><strong>3.1 Manual pause.</strong> You may pause anytime via Trello/email.</p>
+            <p><strong>3.2 Pause cutoff.</strong> Pauses requested after 16:00 (America/Jamaica) take effect the next business day.</p>
+            <p><strong>3.3 Billing while paused.</strong> When paused, renewals stop and the service is inactive.</p>
+            <p><strong>3.4 Banking.</strong> Unused Active Days never expire. Resume anytime and continue with your remaining Active Days.</p>
+            <p><strong>3.5 Pricing on resume.</strong> If public prices changed while paused, you resume at the current public price. Founder rates remain grandfathered while your account is in good standing.</p>
+            <p>
+              <strong>3.6 Reactivation window.</strong> On unpause/resubscription, allow 1–2 business days to re-enter the production queue. This window does not consume Active Days. SLAs start when a request re-enters Active with inputs/access.
+            </p>
+
+            <h2>5) Missed SLA → Credits (Exclusive Remedy for Delay)</h2>
+            <p><strong>4.1 Credit rule.</strong> If we miss the SLA, we credit 1 Active Day for each business day late (rounded up). Credits never expire.</p>
+            <p>
+              <strong>4.2 Exclusions.</strong> No credit where delay is due to missing inputs/access, mid-cycle scope changes, force majeure, third-party outages, or reclassification to Large/Epic (the work will be split and the SLA restarts per cycle).
+            </p>
+            <p><strong>4.3 Exclusive remedy.</strong> SLA Credits are your sole and exclusive remedy for delay or failure to meet service levels.</p>
+
+            <h2>6) Plans, Seats &amp; Brands</h2>
+            <p><strong>5.1 Starter:</strong> 1 seat, 1 brand.</p>
+            <p><strong>5.2 Growth:</strong> up to 5 seats; multi-brand allowed under the same parent company, one shared queue.</p>
+            <p><strong>5.3 Strategic Partner:</strong> access/governance via SOW.</p>
+            <p>Seat = a named teammate who can submit/approve/pause. Brand = distinct identity/site. Throughput remains one Active request across all seats/brands.</p>
+
+            <h2>7) Pricing, Billing &amp; Taxes (Auto-Renew Disclosure)</h2>
+            <p><strong>6.1 Currency &amp; taxes.</strong> Fees are in JMD, exclusive of GCT and any applicable withholding or similar taxes (you're responsible for such taxes, excluding our income taxes).</p>
+            <p>
+              <strong>6.2 Recurring billing consent.</strong> You authorize monthly in-advance billing via our processor; the plan auto-renews month-to-month until paused or cancelled. Renewal terms are presented at checkout and in your receipt.
+            </p>
+            <p><strong>6.3 No refunds.</strong> We do not provide refunds. Your remedies are pausing (indefinite day banking) and SLA credits.</p>
+            <p><strong>6.4 Late/failed payment.</strong> We may suspend service until payment is current.</p>
+            <p><strong>6.5 Price changes.</strong> We may change public prices prospectively; founder pricing is grandfathered while your account is in good standing (pauses do not void founder status).</p>
+
+            <h2>8) Client-Owned Infrastructure &amp; Provider Disclaimers</h2>
+            <p>
+              <strong>7.1 Ownership.</strong> You own your hosting (e.g., Vercel/Netlify/Cloudflare), domains/DNS, repositories, analytics, and data from day one. We operate with least-privilege collaborator access.
+            </p>
+            <p><strong>7.2 Third-party fees.</strong> All provider fees (hosting, domain, email, CRM, apps) are client-paid directly. We do not mark up infrastructure.</p>
+            <p><strong>7.3 Provider outages/limits.</strong> We are not liable for outages, degradation, or limits caused by third-party providers.</p>
+            <p><strong>7.4 Support matrix &amp; maintenance.</strong> We target modern browsers (latest two major versions). Reasonable maintenance windows may occur.</p>
+
+            <h2>9) IP, Moral Rights &amp; Licensing</h2>
+            <p>
+              <strong>8.1 Assignment on payment.</strong> Upon full payment of the then-current billing period, we assign to you all rights, title, and interest in deliverables created exclusively for you, excluding our pre-existing materials, tooling, and open-source components.
+            </p>
+            <p>
+              <strong>8.2 Moral rights &amp; further assurances.</strong> To the fullest extent permitted by law, we waive moral rights and will execute documents reasonably required to perfect your title.
+            </p>
+            <p>
+              <strong>8.3 Background IP and Code Ownership.</strong> We transfer ownership of all original, custom code developed specifically for you as part of the deliverables. The deliverables may also include code, libraries, or components from third-party or open-source tools (such as Next.js, TypeScript, Payload, MongoDB, etc.), which are provided to you under their respective licenses. We do not claim ownership of such third-party components, and your use of them is governed by those licenses. However, we reserve the right to reuse any non-client-specific, generic custom code, modules, or templates created during this project in future work for other clients.
+            </p>
+
+            <h2>10) Acceptable Use &amp; Export Controls</h2>
+            <p>No illegal, harmful, hateful, adult, or infringing content; no malware or abuse. You must comply with applicable export control and sanctions laws.</p>
+
+            <h2>11) Confidentiality, Data Protection &amp; DPA</h2>
+            <p><strong>10.1 Confidentiality.</strong> Each party will keep the other's Confidential Information confidential and use it only to perform under these Terms.</p>
+            <p>
+              <strong>10.2 Data roles.</strong> For website/lead data we process on your behalf, you are data controller and we are your data processor; for our own business records, we are controller.
+            </p>
+            <p>
+              <strong>10.3 Jamaica Data Protection Act (2020).</strong> We will process personal data per applicable law and our Privacy Policy. Where required, we will enter into a Data Processing Addendum (DPA) covering processing, security, sub-processors, and international transfers.
+            </p>
+            <p><strong>10.4 Security.</strong> We follow reasonable practices (least-privilege; encourage 2FA). You are responsible for your account security and lawful instructions.</p>
+
+            <h2>12) Subcontractors, Non-Solicit &amp; Assignment</h2>
+            <p><strong>11.1 Subcontractors.</strong> We may use subcontractors/assistants; we remain responsible for their work.</p>
+            <p>
+              <strong>11.2 Non-solicit (12 months).</strong> During the term and 12 months after, you will not directly solicit for employment any personnel who performed the Services, except responses to public job ads.
+            </p>
+            <p><strong>11.3 Assignment.</strong> Either party may assign to an affiliate or upon merger/sale/change of control with notice; otherwise, assignment requires consent.</p>
+
+            <h2>13) Warranties &amp; Disclaimers</h2>
+            <p><strong>12.1</strong> We warrant we will perform in a professional and workmanlike manner.</p>
+            <p>
+              <strong>12.2</strong> Except as stated, services and deliverables are provided “as is”, without warranties of merchantability, fitness for a particular purpose, or non-infringement. We do not warrant third-party platforms or uninterrupted availability.
+            </p>
+
+            <h2>14) Limitation of Liability</h2>
+            <p><strong>13.1</strong> Neither party is liable for indirect, incidental, special, consequential, or punitive damages.</p>
+            <p><strong>13.2 Cap.</strong> Each party's aggregate liability under these Terms will not exceed the fees you paid in the three (3) months preceding the claim.</p>
+            <p>
+              <strong>13.3 Carve-outs.</strong> The above limits do not apply to: your payment obligations; each party's breach of Confidentiality/Data Protection; or IP infringement. Nothing limits liability for gross negligence or wilful misconduct, where not permitted by law.
+            </p>
+
+            <h2>15) Term, Cancellation &amp; Termination</h2>
+            <p><strong>14.1 Term.</strong> Begins at signup and renews monthly until paused or cancelled.</p>
+            <p><strong>14.2 Pause/Cancel anytime.</strong> Effective upon processing (see 3.2 cutoff).</p>
+            <p><strong>14.3 Termination for breach.</strong> Either party may terminate for material breach after 10 days' written notice and an opportunity to cure.</p>
+
+            <h2>16) Force Majeure</h2>
+            <p>Neither party is liable for delays/failures caused by events beyond reasonable control (e.g., provider outages, natural disasters, war, strikes).</p>
+
+            <h2>17) Changes to These Terms (Notice)</h2>
+            <p>We may update these Terms at any time. Updated Terms will be effective immediately upon posting to our website (or communication to you). It is your responsibility to review them regularly. Continued use of our services after changes means you accept the new Terms.</p>
+
+            <h2>18) Governing Law; E-Signatures; Dispute Resolution</h2>
+            <p><strong>17.1 Governing law:</strong> Jamaica, without regard to conflicts rules.</p>
+            <p>
+              <strong>17.2 E-signatures.</strong> You consent to electronic records/signatures. Jamaican law recognizes e-signatures; contracts and signatures may be formed electronically.
+            </p>
+            <p>
+              <strong>17.3 Dispute route:</strong> Good-faith escalation to senior managers → mediation → if unresolved, arbitration in Kingston, Jamaica under the Arbitration Act (2017), with injunctive relief for IP/confidentiality.
+            </p>
+
+            <h2>19) Website Use (if applicable)</h2>
+            <p>Our site and its content are “as is”; do not scrape, reverse engineer, or use our site to compete. We may update content/availability/pricing at any time.</p>
+
+            <h2>20) Entire Agreement; Order of Precedence; Notices; Misc.</h2>
+            <p>
+              <strong>19.1 Entire agreement.</strong> These Terms, any SOW, the Privacy Policy, and (if applicable) the DPA form the entire agreement. Order of precedence: SOW → Terms → DPA → Privacy Policy.
+            </p>
+            <p><strong>19.2 Independent contractor.</strong> We are an independent contractor.</p>
+            <p><strong>19.3 Severability/waiver.</strong> If a provision is unenforceable, the rest remains in effect; no waiver except in writing.</p>
+            <p>
+              <strong>19.4 Notices.</strong> Formal notices via email to your billing/admin contact and <a className="underline" href="mailto:support@instantprod.dev">support@instantprod.dev</a>, with a copy to the physical address on the invoice.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}

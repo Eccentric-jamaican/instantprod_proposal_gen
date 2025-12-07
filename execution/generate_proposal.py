@@ -117,8 +117,19 @@ def build_placeholder_map(data: Dict[str, Any], logo_path: Optional[Path] = None
     
     # Solution section
     placeholders['SOLUTION'] = escape_html(data.get('solution', ''))
-    # Don't escape - intentionally contains HTML like <br>
-    placeholders['DELIVERABLES'] = str(data.get('deliverables', ''))
+    deliverables_raw = str(data.get('deliverables', ''))
+    placeholders['DELIVERABLES'] = deliverables_raw
+    deliverables_items = [
+        re.sub(r'^\d+[).\-\s]*', '', item).strip()
+        for item in re.split(r'<br\s*/?>', deliverables_raw)
+        if item and item.strip()
+    ]
+
+    for idx in range(4):
+        placeholders[f'SOLUTION_POINT_{idx + 1}'] = (
+            deliverables_items[idx] if idx < len(deliverables_items) else ''
+        )
+
     placeholders['TIMELINE'] = escape_html(data.get('timeline', ''))
     
     # Why Us section
@@ -154,7 +165,17 @@ def build_placeholder_map(data: Dict[str, Any], logo_path: Optional[Path] = None
             placeholders[f'STEP_{step_num}_WHY'] = ''
     
     # Investment section
-    placeholders['INVESTMENT'] = escape_html(data.get('investment', ''))
+    investment_raw = str(data.get('investment', '')).strip()
+    plan_details = {
+        "Starter subscription - flat monthly plan": ("Starter", "JMD 85,000 / month"),
+        "Growth subscription - flat monthly plan": ("Growth", "JMD 240,000 / month"),
+        "Strategic Partner subscription - flat monthly plan": ("Strategic Partner", "JMD 650,000 / month"),
+        "Flat monthly subscription - plan to be confirmed": ("Flat monthly subscription - plan to be confirmed", ""),
+    }
+    plan_label, plan_price = plan_details.get(investment_raw, (investment_raw, ""))
+    placeholders['INVESTMENT'] = escape_html(investment_raw)
+    placeholders['INVESTMENT_PLAN'] = escape_html(plan_label)
+    placeholders['INVESTMENT_PRICE'] = escape_html(plan_price)
     # Don't escape - intentionally contains HTML like <br>
     placeholders['BANK_DETAILS'] = str(data.get('bank_details', ''))
     placeholders['MIN_TERM_LABEL'] = escape_html(data.get('min_term_label', 'Minimum Term'))

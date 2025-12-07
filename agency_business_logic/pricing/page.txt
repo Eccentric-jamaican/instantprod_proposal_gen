@@ -1,0 +1,52 @@
+import type { Metadata } from "next"
+import { PricingSection } from "@/components/pricing/pricing-section"
+import { absoluteUrl, siteConfig } from "@/lib/site"
+import { pricingPlans } from "@/lib/pricing"
+
+export const metadata: Metadata = {
+  title: "Pricing",
+  description:
+    "Compare Instantprod plans and choose the subscription that matches your team's speed—Starter, Growth, or Strategic Partner.",
+  alternates: {
+    canonical: absoluteUrl("/pricing"),
+  },
+  openGraph: {
+    title: "Instantprod Pricing",
+    description:
+      "Monthly plans for on-demand design and development, including Starter, Growth, and Strategic Partner tiers.",
+    url: absoluteUrl("/pricing"),
+  },
+};
+
+const pricingStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Instantprod Subscription Plans",
+  provider: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+  },
+  serviceType: "Productized design and development",
+  offers: pricingPlans.map((plan) => ({
+    "@type": "Offer",
+    name: `${plan.name} ${plan.subtitle}`.trim(),
+    price: plan.price.monthly,
+    priceCurrency: "USD",
+    url: absoluteUrl("/pricing"),
+    description: plan.features.join(", "),
+    availability: "https://schema.org/InStock",
+  })),
+} as const;
+
+export default function PricingPage() {
+  return (
+    <main className="bg-[#0f0c09] text-white min-h-screen pt-28 pb-20 px-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingStructuredData) }}
+      />
+      <PricingSection plans={pricingPlans} />
+    </main>
+  )
+}

@@ -31,3 +31,4 @@ The LLM must output data matching our template fields:
 
 ## Setup
 - Requires `OPENAI_API_KEY` or `GEMINI_API_KEY` in `.env`.
+- By default, `execution/analyze_transcript.py` uses the OpenAI `gpt-5-nano` model (override with `--model` if needed).
