@@ -448,7 +448,7 @@
     }
 
     .invest-card {
-      border: 1px solid var(--border);
+      border: none;
       border-radius: 14px;
       padding: 32px 28px;
       background: rgba(255, 255, 255, 0.04);
@@ -972,27 +972,35 @@
         <div class="logo"><img src="{{LOGO_DATA_URI}}" alt="Logo"></div>
       </div>
       <div class="title-block">
-        <h1>{{CLIENT_NAME}}</h1>
+        <h1>Website proposal for {{CLIENT_NAME}}</h1>
         <div class="subtitle">Prepared by {{PREPARED_BY}} — {{DATE}}</div>
       </div>
-      <div class="meta meta-strip">CONFIDENTIAL | {{CLIENT_NAME}} STRATEGIC INITIATIVE | {{DATE}}</div>
+      <div class="meta meta-strip">WEBSITE PROPOSAL | {{CLIENT_NAME}} | {{DATE}}</div>
     </header>
 
     <div class="hero-img"></div>
 
-    <!-- PROBLEM -->
+    <!-- YOUR GOALS -->
+    <section class="goals-section">
+      <h2><strong>YOUR</strong> goals.</h2>
+      <div class="grid-2">
+        {{GOALS_HTML}}
+      </div>
+    </section>
+
+    <!-- PROBLEM FACTORS -->
     <section class="problem-section">
-      <h2><strong>YOUR</strong> problem areas.</h2>
+      <h2><strong>Problem</strong> factors getting in the way.</h2>
       <p class="problem-intro">{{PROBLEM}}</p>
       <div class="problem-divider"></div>
       <div class="problem-grid">
         <div class="problem-card">
           <span class="problem-num">01</span>
-          <p class="problem-body"><strong>Problem cost:</strong> {{PROBLEM_COST}}</p>
+          <p class="problem-body">{{PROBLEM_POINT_1}}</p>
         </div>
         <div class="problem-card">
           <span class="problem-num">02</span>
-          <p class="problem-body"><strong>Missed opportunity:</strong> {{OPPORTUNITY}}</p>
+          <p class="problem-body">{{PROBLEM_POINT_2}}</p>
         </div>
         <div class="problem-card">
           <span class="problem-num">03</span>
@@ -1005,13 +1013,14 @@
       </div>
     </section>
 
-    <!-- SOLUTION -->
+    <!-- MY PITCH -->
     <section class="solution-section">
-      <h2><strong>YOUR</strong> solution.</h2>
+      <h2><strong>My</strong> pitch &amp; proposed solutions.</h2>
       <p class="solution-summary">{{SOLUTION}}</p>
       <p class="solution-context">
-        Solving these above needs is straightforward; we've shipped this calibre of work many times before. In practice, our
-        solution layers <span>process</span>, <span>automation</span>, and repeatable <span>SOP</span>. Here's how that rolls out for {{CLIENT_NAME}}:
+        Solving these needs is straightforward; we've shipped fast, modern sites that generate leads like this many times
+        before. In practice, we combine <span>modern design</span>, <span>clean implementation</span>, and simple
+        <span>lead capture</span>. Here's how that rolls out for {{CLIENT_NAME}}:
       </p>
       <div class="solution-divider"></div>
       <div class="solution-grid">
@@ -1038,82 +1047,9 @@
       </div>
     </section>
 
-    <!-- WHY US -->
-    <section>
-      <h2><strong>WHY</strong> us?</h2>
-      <div class="why-container">
-        <div class="why-text">
-          <div class="black-card">
-            <h3>{{WHY_US_TITLE_1}}</h3>
-            <p>{{WHY_US_BODY_1}}</p>
-          </div>
-          <div class="black-card">
-            <h3>{{WHY_US_TITLE_2}}</h3>
-            <p>{{WHY_US_BODY_2}}</p>
-          </div>
-        </div>
-        <div class="why-photo"></div>
-      </div>
-
-      <div class="why-matters">
-        <div class="why-matters-heading">Why that matters to you:</div>
-        <div class="why-matters-list">
-          <div class="why-matters-item">
-            <span class="why-matters-num">1</span>
-            <p class="why-matters-body"><strong>Recover lost market share.</strong> Every search you don’t appear for defaults to a competitor. We establish your digital storefront and position you for intent keywords, recapturing demand that already exists in your market.</p>
-          </div>
-          <div class="why-matters-item">
-            <span class="why-matters-num">2</span>
-            <p class="why-matters-body"><strong>Institutional trust, instantly.</strong> Stakeholders validate legitimacy online. We package proof—case studies, social proof, and clear offers—so decisions move forward instead of stalling in "send more info".</p>
-          </div>
-          <div class="why-matters-item">
-            <span class="why-matters-num">3</span>
-            <p class="why-matters-body"><strong>Lead flow without more labor.</strong> Your site behaves like an always-on SDR—forms, schedulers, and automations qualify and route leads—so your team spends time closing, not chasing.</p>
-          </div>
-        </div>
-
-        <div class="why-matters-meta">
-          <p><strong>Speed.</strong> Live in 4 business days or we comp your first month of hosting.</p>
-          <p><strong>Modern stack.</strong> We review your business logic and plug in modern tools—AI, automation, and best-in-class SaaS—where they actually enhance your website and pipeline.</p>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- PROCESS -->
-    <section>
-      <h2><strong>WHAT</strong> working with us looks like.</h2>
-      <table class="process-table">
-        <thead>
-          <tr>
-            <th>Step</th>
-            <th>What Happens</th>
-            <th>Why It Matters</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="step-num">01</span><span class="step-title">No standing meetings</span></td>
-            <td>We work from a shared Trello board. You add requests and choose what we do next.</td>
-            <td>Everything lives in one place, so you see progress without chasing updates. This ensures we move faster and more efficiently giving you a faster feedback loop.</td>
-          </tr>
-          <tr>
-            <td><span class="step-num">02</span><span class="step-title">Clear turnaround times</span></td>
-            <td>Once we have what we need from you, most requests are finished in about 3–4 business days.</td>
-            <td>You know roughly when work will be done and can plan launches around real dates.</td>
-          </tr>
-          <tr>
-            <td><span class="step-num">03</span><span class="step-title">You can pause</span></td>
-            <td>You only pay for days we’re working.</td>
-            <td>You control spend, and the site and accounts stay in your name.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- INVESTMENT -->
+    <!-- TERMS -->
     <section class="investment-section">
-      <h2><strong>WHAT</strong> you're investing.</h2>
+      <h2><strong>TERMS</strong> &amp; monthly subscription.</h2>
       <div class="invest-card">
         <div class="price-row">
           <span class="price-label">Monthly Subscription</span>
@@ -1181,7 +1117,7 @@
     </section>
 
     <div class="meta" style="margin-top: 40px; border: none;">
-      CONFIDENTIAL | {{PREPARED_BY}} | {{DATE}}
+      Prepared by {{PREPARED_BY}} · {{DATE}}
     </div>
   </div>
 
@@ -1201,15 +1137,16 @@
         canvas.width = canvas.clientWidth * ratio;
         canvas.height = canvas.clientHeight * ratio;
         ctx.scale(ratio, ratio);
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
         ctx.strokeStyle = '#f5e6c9';
       }
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas);
 
       let drawing = false;
-      let last = { x: 0, y: 0 };
+      let points = [];
       let isAgreed = false;
 
       function getPos(e) {
@@ -1221,25 +1158,47 @@
       }
 
       function start(e) {
-        if (isAgreed) return; // Disable drawing if agreed via button
+        if (isAgreed) return;
         drawing = true;
-        last = getPos(e);
+        points = [getPos(e)];
         status.textContent = 'Signing...';
       }
+
       function move(e) {
         if (!drawing) return;
         const pos = getPos(e);
+        points.push(pos);
+
+        if (points.length < 3) return;
+
         ctx.beginPath();
-        ctx.moveTo(last.x, last.y);
-        ctx.lineTo(pos.x, pos.y);
+        ctx.moveTo(points[0].x, points[0].y);
+
+        for (let i = 1; i < points.length - 1; i++) {
+          const midX = (points[i].x + points[i + 1].x) / 2;
+          const midY = (points[i].y + points[i + 1].y) / 2;
+          ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+        }
+
         ctx.stroke();
-        last = pos;
+
+        if (points.length > 3) {
+          points = points.slice(-3);
+        }
       }
+
       function end() {
-        if (drawing) {
+        if (drawing && points.length > 0) {
+          if (points.length >= 2) {
+            ctx.beginPath();
+            ctx.moveTo(points[points.length - 2].x, points[points.length - 2].y);
+            ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+            ctx.stroke();
+          }
           status.textContent = 'Signature recorded.';
         }
         drawing = false;
+        points = [];
       }
 
       canvas.addEventListener('mousedown', start);
@@ -1250,28 +1209,23 @@
       canvas.addEventListener('touchmove', (e) => { e.preventDefault(); move(e); });
       canvas.addEventListener('touchend', end);
 
-      // CLEAR / RESET
       clearBtn?.addEventListener('click', () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stamp.classList.remove('visible');
         agreeBtn.classList.remove('active');
         isAgreed = false;
+        points = [];
         status.textContent = 'Cleared. Please sign or click "I Agree".';
       });
 
-      // I AGREE BUTTON
       agreeBtn?.addEventListener('click', () => {
-        // Clear any drawing
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Show stamp
         stamp.classList.add('visible');
         agreeBtn.classList.add('active');
         isAgreed = true;
         status.textContent = 'Digital agreement recorded.';
       });
 
-      // DOWNLOAD PDF
       document.getElementById('sig-download-pdf').addEventListener('click', () => {
         try {
           window.print();

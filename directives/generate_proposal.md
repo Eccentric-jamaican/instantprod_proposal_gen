@@ -3,33 +3,47 @@
 ## Goal
 Generate a customized HTML proposal for a client by populating the `proposal_template.html` with client-specific data, then optionally convert to PDF.
 
+## Proposal Structure (Nick-style)
+The proposal follows this section flow:
+1. **Cover** — Title: "Website proposal for [Client Name]", date, prepared by
+2. **Your Goals** — Dynamic list of client goals (3–10+ items from transcript)
+3. **Problem Factors** — 4 specific problem factors getting in the way
+4. **My Pitch & Proposed Solutions** — Solution summary + 4 deliverables + timeline
+5. **Terms & Monthly Subscription** — Pricing, bank details, notes
+6. **Signature** — Digital signature pad with smooth Bezier curves
+
 ## Inputs
-- **Client Data**: JSON or dictionary containing all placeholder values
+- **Client Data**: JSON containing all placeholder values (see below)
 - **Logo Image**: Path to logo image (will be embedded as data URI)
 - **Hero Image** (optional): Path to hero image for the proposal header
 - **Output Path**: Where to save the generated proposal
 
 ### Required Client Data Fields
 
+> **Note:** `date`, `prepared_by`, and `website` are set by the backend, NOT the LLM.
+
 ```json
 {
-  // Header
-  "company": "InstantProd",
+  // Header (only client_name from LLM; rest handled by backend)
   "client_name": "Acme Corp",
-  "website": "acmecorp.com",
-  "prepared_by": "InstantProd",
-  "date": "December 6, 2025",
   
-  // Problem Section
-  "problem": "Brief description of the client's main problem...",
-  "problem_cost": "Description of what this problem is costing them...",
-  "opportunity": "What they're missing out on...",
-  "problem_point_3": "Additional pain point...",
-  "problem_point_4": "Another pain point...",
+  // Goals Section (dynamic, 3–10+ items)
+  "goals": [
+    "Have a modern, responsive website",
+    "Generate more leads from local search",
+    "Make it easy to contact from any device"
+  ],
+  
+  // Problem Section (4 equal problem factors)
+  "problem": "Brief summary of the client's main pain points...",
+  "problem_point_1": "First specific problem factor...",
+  "problem_point_2": "Second specific problem factor...",
+  "problem_point_3": "Third specific problem factor...",
+  "problem_point_4": "Fourth specific problem factor...",
   
   // Solution Section
   "solution": "How we solve their problem...",
-  "deliverables": "What they get: Website, Branding, etc.",
+  "deliverables": "1. Responsive website<br>2. Lead capture forms<br>3. SEO basics<br>4. Mobile optimization",
   "timeline": "2-3 weeks",
   
   // Why Us
@@ -38,16 +52,16 @@ Generate a customized HTML proposal for a client by populating the `proposal_tem
     {"title": "Quality", "body": "Premium design at agency level."}
   ],
   
-  // Process Steps
+  // Process Steps (exactly 3)
   "process_steps": [
     {"num": "01", "title": "Discovery", "what": "...", "why": "..."},
     {"num": "02", "title": "Design", "what": "...", "why": "..."},
     {"num": "03", "title": "Delivery", "what": "...", "why": "..."}
   ],
   
-  // Investment
-  "investment": "$2,500/mo",
-  "bank_details": "Account details...",
+  // Investment (use plan strings, not raw amounts)
+  "investment": "Starter subscription - flat monthly plan",
+  "bank_details": "Scotiabank<br>Name: Addis Ellis<br>Account: ...",
   "min_term_label": "Minimum Term",
   "min_term_value": "3 months",
   "invest_notes": [
@@ -61,6 +75,13 @@ Generate a customized HTML proposal for a client by populating the `proposal_tem
   "signature_instruction": "Please sign below to accept this proposal..."
 }
 ```
+
+### Investment Plan Strings
+The `investment` field should be one of:
+- `"Starter subscription - flat monthly plan"` → JMD 85,000/mo
+- `"Growth subscription - flat monthly plan"` → JMD 240,000/mo
+- `"Strategic Partner subscription - flat monthly plan"` → JMD 650,000/mo
+- `"Flat monthly subscription - plan to be confirmed"` (fallback)
 
 ## Tools/Scripts to Use
 - `execution/generate_proposal.py` - Main script to generate proposals

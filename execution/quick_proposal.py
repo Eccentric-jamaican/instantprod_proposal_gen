@@ -121,9 +121,7 @@ def main():
         print(f"[ERROR] Analysis failed:\n{output}")
         return 1
     
-    # The JSON file is saved next to the transcript
-    json_file = transcript_file.with_suffix('').with_suffix('_data.json')
-    # Actually the script saves it as transcript_file.stem + '_data.json'
+    # The JSON file is saved next to the transcript as `<stem>_data.json`
     json_file = transcript_file.parent / f"{transcript_file.stem}_data.json"
     
     if not json_file.exists():

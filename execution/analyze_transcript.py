@@ -26,6 +26,7 @@ CRITICAL: You must output PURE JSON. No markdown. No `json` wrappers.
 Guardrails for UI Integrity:
 1. **Brevity is King**: The UI breaks if text is too long. Keep "problem" and "solution" to MAX 2 sentences.
 2. **Exact Counts**: 
+   - `goals`: Return at least 3 items and include all distinct goals mentioned in the transcript. There is no maximum, but keep each goal short.
    - `process_steps`: MUST have exactly 3 items.
    - `why_us`: MUST have exactly 2 items.
    - `invest_notes`: MUST have exactly 4 short bullet points.
@@ -42,18 +43,20 @@ Guardrails for UI Integrity:
        * Strategic Partner: complex build such as multi-portal or multi-tenant apps, enterprise RFPs, logistics/operations portals, significant back-end work, or multiple deep integrations (e.g. CRM/ERP, real-time tracking, vendor/carrier portals).
    - Only if the transcript is genuinely too ambiguous to decide, set `investment` to "Flat monthly subscription - plan to be confirmed".
 
-SCHEMA & CONSTRAINTS:
+SCHEMA & CONSTRAINTS (backend or other inputs will set `date`, `prepared_by`, and `website`; do NOT include those fields):
 {
   "client_name": "Inferred Company Name",
-  "prepared_by": "InstantProd",
-  "date": "Today's Date",
-  "website": "Inferred URL",
   
-  "problem": "MAX 30 words. Core pain point.",
-  "problem_cost": "MAX 5 words. Only use a numeric amount if the transcript explicitly states one; otherwise use 'Unknown'.",
-  "opportunity": "MAX 20 words. The positive outcome.",
-  "problem_point_3": "MAX 5 words. Very short label.",
-  "problem_point_4": "MAX 5 words. Very short label.",
+  "goals": [
+    "Short goal 1 (Max 12 words)",
+    "Short goal 2 (Max 12 words)"
+  ],
+  
+  "problem": "MAX 30 words. Core pain point summary.",
+  "problem_point_1": "MAX 15 words. First specific problem factor.",
+  "problem_point_2": "MAX 15 words. Second specific problem factor.",
+  "problem_point_3": "MAX 15 words. Third specific problem factor.",
+  "problem_point_4": "MAX 15 words. Fourth specific problem factor.",
   
   "solution": "MAX 30 words. High-level solution pitch.",
   "deliverables": "A single string with items separated by <br>. Example: '1. Dashboard<br>2. API Integration'. MAX 4 items.",

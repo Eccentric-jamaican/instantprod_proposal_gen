@@ -107,11 +107,38 @@ def build_placeholder_map(data: Dict[str, Any], logo_path: Optional[Path] = None
             placeholders['LOGO_DATA_URI'] = ''
     else:
         placeholders['LOGO_DATA_URI'] = data.get('logo_data_uri', '')
-    
+
+    # Goals section (dynamic list rendered as HTML)
+    goals = data.get('goals', [])
+    goal_items = []
+
+    if isinstance(goals, list) and goals:
+        for idx, goal in enumerate(goals):
+            num_str = f"{idx + 1:02d}"
+            goal_items.append(
+                f'<div class="item"><span class="num">{num_str}</span>'
+                f'<p class="desc">{escape_html(goal)}</p></div>'
+            )
+    else:
+        # Fallback defaults if no explicit goals are provided
+        default_goals = [
+            'Have a modern, responsive website that clearly explains what you do.',
+            'Turn more of the people already finding you into qualified leads and inquiries.',
+            'Make it easy for prospects to contact or book you from any device, at any time.',
+        ]
+        for idx, goal in enumerate(default_goals):
+            num_str = f"{idx + 1:02d}"
+            goal_items.append(
+                f'<div class="item"><span class="num">{num_str}</span>'
+                f'<p class="desc">{escape_html(goal)}</p></div>'
+            )
+
+    placeholders['GOALS_HTML'] = "".join(goal_items)
+
     # Problem section
     placeholders['PROBLEM'] = escape_html(data.get('problem', ''))
-    placeholders['PROBLEM_COST'] = escape_html(data.get('problem_cost', ''))
-    placeholders['OPPORTUNITY'] = escape_html(data.get('opportunity', ''))
+    placeholders['PROBLEM_POINT_1'] = escape_html(data.get('problem_point_1', ''))
+    placeholders['PROBLEM_POINT_2'] = escape_html(data.get('problem_point_2', ''))
     placeholders['PROBLEM_POINT_3'] = escape_html(data.get('problem_point_3', ''))
     placeholders['PROBLEM_POINT_4'] = escape_html(data.get('problem_point_4', ''))
     
