@@ -51,6 +51,8 @@ Add to your Claude Desktop config (`%APPDATA%\Claude\claude_desktop_config.json`
 | **`sync_to_drive`** | ☁️ Sync all local files to Google Drive |
 | **`list_drive_files`** | ☁️ List files stored in Google Drive |
 | **`download_from_drive`** | ☁️ Download a file from Google Drive |
+| **`search`** | 🔍 Search transcripts & proposals (ChatGPT Connector Standard) |
+| **`fetch`** | 🔍 Retrieve document content (ChatGPT Connector Standard) |
 
 ---
 

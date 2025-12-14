@@ -27,6 +27,10 @@ Resources Available:
     - proposal://email-template - The email template
     - directive://generate_proposal - SOP for generating proposals
     - directive://send_proposal - SOP for sending proposals
+
+ChatGPT Connector Tools:
+    - search: Search for documents/items (returns JSON-encoded results)
+    - fetch: Get full content of an item (returns JSON-encoded content)
 """
 
 import os
@@ -429,6 +433,43 @@ async def list_tools() -> list[Tool]:
                 },
                 "required": ["file_id", "output_name"]
             }
+        ),
+        # ChatGPT Connector Tools
+        Tool(
+            name="search",
+            description="""Search for documents in the InstantProd system.
+            
+            Searches across:
+            1. Saved Transcripts (Files)
+            2. Generated Proposals (Files)
+            
+            Returns a strict JSON-encoded string with results for ChatGPT Connectors.""",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Search query"
+                    }
+                },
+                "required": ["query"]
+            }
+        ),
+        Tool(
+            name="fetch",
+            description="""Retrieve the full content of a document by ID.
+            
+            Returns a strict JSON-encoded string for ChatGPT Connectors.""",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique ID of the document to fetch"
+                    }
+                },
+                "required": ["id"]
+            }
         )
     ]
 
@@ -466,8 +507,14 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             return await handle_sync_to_drive(arguments)
         elif name == "list_drive_files":
             return await handle_list_drive_files(arguments)
+        elif name == "list_drive_files":
+            return await handle_list_drive_files(arguments)
         elif name == "download_from_drive":
             return await handle_download_from_drive(arguments)
+        elif name == "search":
+            return await handle_search(arguments)
+        elif name == "fetch":
+            return await handle_fetch(arguments)
         else:
             return [TextContent(type="text", text=f"Unknown tool: {name}")]
     except Exception as e:
@@ -925,6 +972,88 @@ async def read_resource(uri: str) -> str:
         return f"Directive '{directive_name}' not found"
     
     return f"Unknown resource: {uri}"
+
+
+# =============================================================================
+# CHATGPT CONNECTOR HANDLERS (Search/Fetch)
+# =============================================================================
+
+async def handle_search(args: dict) -> list[TextContent]:
+    """
+    Search tool for ChatGPT Connectors.
+    Returns JSON-encoded string in strict format: {"results": [{"id":..., "title":..., "url":...}]}
+    """
+    query = args.get("query", "").lower()
+    results = []
+    
+    # 1. Search Files (Transcripts & Proposals)
+    if TRANSCRIPTS_DIR.exists():
+        for f in TRANSCRIPTS_DIR.glob(f"*{query}*"):
+            if f.suffix in ['.txt', '.json']:
+                results.append({
+                    "id": f"file://transcripts/{f.name}",
+                    "title": f"Transcript: {f.name}",
+                    "url": str(f.absolute())
+                })
+
+    if PROPOSALS_DIR.exists():
+        for f in PROPOSALS_DIR.glob(f"*{query}*"):
+            if f.suffix == '.html':
+                results.append({
+                    "id": f"file://proposals/{f.name}",
+                    "title": f"Proposal: {f.name}",
+                    "url": str(f.absolute())
+                })
+
+    # 2. Search Sheets (Clients)
+    # We'll do a quick partial match if possible, or just skip if too heavy.
+    # For now, let's keep it lightweight and search files primarily.
+    # Real implementation would call sheets_manager.py here.
+    
+    response_obj = {"results": results}
+    return [TextContent(type="text", text=json.dumps(response_obj))]
+
+
+async def handle_fetch(args: dict) -> list[TextContent]:
+    """
+    Fetch tool for ChatGPT Connectors.
+    Returns JSON-encoded strict format: {"id":..., "title":..., "text":..., "url":...}
+    """
+    doc_id = args.get("id", "")
+    content_obj = {}
+    
+    try:
+        if doc_id.startswith("file://"):
+            # Handle file path
+            rel_path = doc_id.replace("file://", "")
+            if rel_path.startswith("transcripts/"):
+                path = TRANSCRIPTS_DIR / rel_path.replace("transcripts/", "")
+            elif rel_path.startswith("proposals/"):
+                path = PROPOSALS_DIR / rel_path.replace("proposals/", "")
+            else:
+                path = None
+            
+            if path and path.exists():
+                text = path.read_text(encoding='utf-8')
+                content_obj = {
+                    "id": doc_id,
+                    "title": path.name,
+                    "text": text,
+                    "url": str(path.absolute()),
+                    "metadata": {
+                        "size": path.stat().st_size,
+                        "modified": str(datetime.fromtimestamp(path.stat().st_mtime))
+                    }
+                }
+            else:
+                 content_obj = {"id": doc_id, "error": "File not found"}
+        else:
+             content_obj = {"id": doc_id, "error": "Invalid ID format"}
+             
+    except Exception as e:
+        content_obj = {"id": doc_id, "error": str(e)}
+
+    return [TextContent(type="text", text=json.dumps(content_obj))]
 
 
 # =============================================================================
