@@ -140,8 +140,21 @@ ngrok http 8000
 ### 2. Railway/Render (Production)
 Deploy the `api_server.py` to a cloud platform and use that URL.
 
-### 3. Vercel (Serverless)
-Convert to serverless functions if needed.
+### 3. Vercel (Serverless - Recommended)
+The standard deployment method for this project.
+
+1.  **Repo:** Connect GitHub to Vercel.
+2.  **Environment Variables:**
+    *   `GOOGLE_CREDENTIALS_BASE64`: (Base64 of credentials.json)
+    *   `GOOGLE_TOKEN_BASE64`: (Base64 of token.json)
+    *   `MCP_API_KEY`: (Secure password)
+    *   `VERCEL_TOKEN`: (Vercel API Token for self-deployment)
+    *   `VERCEL`: `1`
+3.  **ChatGPT Configuration:**
+    *   **Action URL:** `https://your-app.vercel.app/gpt-schema.json`
+    *   **Auth:** Custom (`X-API-Key` header)
+
+**Note:** On Vercel, the server is stateless. All data is automatically synced to **Google Drive** (`InstantProd Proposals` folder) to persist between requests.
 
 ---
 
