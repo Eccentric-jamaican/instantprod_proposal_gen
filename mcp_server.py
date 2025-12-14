@@ -54,14 +54,32 @@ from mcp.types import (
 # Setup paths
 PROJECT_ROOT = Path(__file__).parent
 EXECUTION_DIR = PROJECT_ROOT / "execution"
-DIRECTIVES_DIR = PROJECT_ROOT / "directives"
-TMP_DIR = PROJECT_ROOT / ".tmp"
-TRANSCRIPTS_DIR = TMP_DIR / "transcripts"
-PROPOSALS_DIR = TMP_DIR / "proposals"
+sys.path.insert(0, str(PROJECT_ROOT))
+
+# Use auth_helper to get correct paths (handles Vercel /tmp)
+try:
+    import auth_helper
+    CREDENTIALS_FILE, TOKEN_FILE = auth_helper.restore_credentials()
+except ImportError:
+    CREDENTIALS_FILE = PROJECT_ROOT / 'credentials.json'
+    TOKEN_FILE = PROJECT_ROOT / 'token.json'
+
+# Configuration
+# On Vercel, we MUST use /tmp for writing files
+if os.environ.get("VERCEL"):
+    TMP_DIR = Path("/tmp") / '.tmp'
+else:
+    TMP_DIR = PROJECT_ROOT / '.tmp'
+    
+TRANSCRIPTS_DIR = TMP_DIR / 'transcripts'
+PROPOSALS_DIR = TMP_DIR / 'proposals'
+DEPLOY_DIR = TMP_DIR / 'deploy'
+DIRECTIVES_DIR = PROJECT_ROOT / "directives" # This line was moved from above
 
 # Ensure directories exist
 TRANSCRIPTS_DIR.mkdir(parents=True, exist_ok=True)
 PROPOSALS_DIR.mkdir(parents=True, exist_ok=True)
+DEPLOY_DIR.mkdir(parents=True, exist_ok=True)
 
 # Initialize MCP server
 server = Server("instantprod-proposal-generator")

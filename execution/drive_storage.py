@@ -59,11 +59,22 @@ SCOPES = [
     'https://www.googleapis.com/auth/gmail.send',
 ]
 
-CREDENTIALS_FILE = PROJECT_ROOT / 'credentials.json'
-TOKEN_FILE = PROJECT_ROOT / 'token.json'
+# Use auth_helper to get correct paths (handles Vercel /tmp)
+try:
+    import auth_helper
+    CREDENTIALS_FILE, TOKEN_FILE = auth_helper.restore_credentials()
+except ImportError:
+    # Fallback for local dev if auth_helper not found in path
+    CREDENTIALS_FILE = PROJECT_ROOT / 'credentials.json'
+    TOKEN_FILE = PROJECT_ROOT / 'token.json'
 
 # Local directories to sync
-TMP_DIR = PROJECT_ROOT / '.tmp'
+# On Vercel, we must write to /tmp
+if os.environ.get("VERCEL"):
+    TMP_DIR = Path("/tmp") / '.tmp'
+else:
+    TMP_DIR = PROJECT_ROOT / '.tmp'
+
 TRANSCRIPTS_DIR = TMP_DIR / 'transcripts'
 PROPOSALS_DIR = TMP_DIR / 'proposals'
 DEPLOY_DIR = TMP_DIR / 'deploy'
