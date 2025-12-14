@@ -570,6 +570,10 @@ async def handle_analyze_transcript(args: dict) -> list[TextContent]:
         with open(json_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
+        # Auto-upload to Drive (Stateless persistence)
+        run_script('execution/drive_storage.py', ['--action', 'upload', '--file', str(transcript_file), '--folder', 'transcripts'])
+        run_script('execution/drive_storage.py', ['--action', 'upload', '--file', str(json_file), '--folder', 'transcripts'])
+
         return [TextContent(
             type="text",
             text=f"""✅ Transcript analyzed successfully!
@@ -583,8 +587,12 @@ async def handle_analyze_transcript(args: dict) -> list[TextContent]:
 {json.dumps(data, indent=2)}
 ```
 
-**Next Step:** Use `generate_proposal` with client_data_path="{json_file}" to create the HTML proposal."""
+**☁️ Cloud Sync (Vercel):**
+Files uploaded to Google Drive for persistence.
+
+**Next Step:** Use `generate_proposal` with client_data_path="{json_file.name}" to create the HTML proposal."""
         )]
+
     else:
         return [TextContent(type="text", text=f"Analysis completed but JSON not found.\nOutput: {output}")]
 
@@ -594,6 +602,24 @@ async def handle_generate_proposal(args: dict) -> list[TextContent]:
     client_data_path = args.get("client_data_path")
     client_name = args.get("client_name")
     website = args.get("website")
+    
+    # Stateless Check: If file is missing locally, try downloading from Drive
+    if client_data_path and not Path(client_data_path).exists():
+        filename = Path(client_data_path).name
+        print(f"File {filename} not found locally (Vercel stateless), checking Drive...")
+        
+        # Determine strict output path (ensure it is in the right dir)
+        # If the path passed was absolute/temp, reuse it. Otherwise use transcripts dir.
+        download_target = Path(client_data_path)
+        if not download_target.is_absolute():
+            download_target = TRANSCRIPTS_DIR / filename
+            client_data_path = str(download_target) # Update path for script
+
+        success, _ = run_script('execution/drive_storage.py', [
+            '--action', 'download', 
+            '--file-id', filename, 
+            '--output', str(download_target)
+        ])
     
     cmd_args = []
     

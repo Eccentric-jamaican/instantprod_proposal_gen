@@ -431,15 +431,37 @@ def main(action: str, file_path: Optional[str], folder: str, file_id: Optional[s
                     print(f"     ID: {f['id']}")
             
         elif action == 'download':
-            if not file_id or not output:
-                print("[ERROR] --file-id and --output are required for download")
+            target_id = file_id
+            
+            # If file_id looks like a filename, try to find it
+            if file_id and '.' in file_id:
+                 print(f"Searching for file '{file_id}' in Drive...")
+                 found_files = []
+                 # Search in all known folders
+                 for f_id in folder_ids.values():
+                     q = f"'{f_id}' in parents and name = '{file_id}' and trashed = false"
+                     res = service.files().list(q=q, fields="files(id, name)").execute()
+                     found_files.extend(res.get('files', []))
+                 
+                 if found_files:
+                     target_id = found_files[0]['id']
+                     print(f"✅ Found file: {target_id}")
+                 else:
+                     print(f"[ERROR] Could not find file named '{file_id}' in Drive.")
+                     return 1
+
+            if not target_id or not output:
+                print("[ERROR] --file-id (or filename) and --output are required for download")
                 return 1
             
             output_path = Path(output)
             if not output_path.is_absolute():
                 output_path = PROJECT_ROOT / output_path
             
-            download_file(service, file_id, output_path)
+            # Ensure parent dir exists (important for Vercel /tmp)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+
+            download_file(service, target_id, output_path)
             print(f"\n✅ Downloaded to: {output_path}")
         
         return 0
