@@ -19,7 +19,13 @@ def main(proposal: str, client_slug: str):
     project_name = f"proposal-{client_slug.lower().replace(' ', '-')}"[:50] # sanitize
     
     # 1. Prepare Deploy Directory
-    deploy_dir = PROJECT_ROOT / '.tmp' / 'deploy' / project_name
+    # On Vercel (or any read-only env), use /tmp
+    if os.environ.get("VERCEL"):
+        deploy_root = Path("/tmp")
+    else:
+        deploy_root = PROJECT_ROOT
+
+    deploy_dir = deploy_root / '.tmp' / 'deploy' / project_name
     if deploy_dir.exists():
         shutil.rmtree(deploy_dir)
     deploy_dir.mkdir(parents=True, exist_ok=True)
@@ -63,7 +69,7 @@ def main(proposal: str, client_slug: str):
             print("="*50)
             
             # Save the URL
-            with open(PROJECT_ROOT / '.tmp' / 'last_deployment_url.txt', 'w') as f:
+            with open(deploy_root / '.tmp' / 'last_deployment_url.txt', 'w') as f:
                 f.write(deploy_url)
         else:
             print("[INFO] Deploy completed but couldn't parse URL. Output below:")
