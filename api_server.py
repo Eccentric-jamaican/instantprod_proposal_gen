@@ -67,6 +67,10 @@ app = FastAPI(
     title="InstantProd Proposal Generator API",
     description="REST API for the proposal generation workflow. Connect this to ChatGPT via Custom GPT Actions.",
     version="1.0.0",
+    servers=[
+        {"url": "https://instantprod-proposal-gen.vercel.app", "description": "Production Server"},
+        {"url": "http://localhost:8000", "description": "Local Development"}
+    ]
 )
 
 # Enable CORS for ChatGPT and other clients
