@@ -11,74 +11,96 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 @click.command()
 @click.option('--proposal', required=True, type=click.Path(exists=True), help='Path to HTML proposal file')
-@click.option('--client-slug', default='proposal', help='Client name for project (e.g. acme)')
+@click.option('--client-slug', default='proposal', help='Client name for project')
 def main(proposal: str, client_slug: str):
-    """Deploy proposal to Vercel."""
+    """Deploy proposal to Vercel via REST API (No CLI required)."""
     
+    # 1. Configuration
+    token = os.environ.get('VERCEL_TOKEN')
+    if not token:
+        print("[FAIL] VERCEL_TOKEN environment variable is required.")
+        return 1
+
+    # Project setup
+    project_name = f"proposal-{client_slug.lower().replace(' ', '-')}"[:50]
     proposal_path = Path(proposal)
-    project_name = f"proposal-{client_slug.lower().replace(' ', '-')}"[:50] # sanitize
     
-    # 1. Prepare Deploy Directory
-    # On Vercel (or any read-only env), use /tmp
-    if os.environ.get("VERCEL"):
-        deploy_root = Path("/tmp")
-    else:
-        deploy_root = PROJECT_ROOT
+    # Read HTML content
+    with open(proposal_path, 'r', encoding='utf-8') as f:
+        html_content = f.read()
 
-    deploy_dir = deploy_root / '.tmp' / 'deploy' / project_name
-    if deploy_dir.exists():
-        shutil.rmtree(deploy_dir)
-    deploy_dir.mkdir(parents=True, exist_ok=True)
+    # 2. Construct API Payload
+    # Vercel API v13 allows direct file structure
+    url = "https://api.vercel.com/v13/deployments"
     
-    # 2. Copy Proposal as index.html
-    shutil.copy(proposal_path, deploy_dir / 'index.html')
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "name": project_name,
+        "files": [
+            {
+                "file": "index.html",
+                "data": html_content,
+                "encoding": "utf-8"
+            },
+            {
+                "file": "vercel.json",
+                "data": '{"cleanUrls": true}',
+                "encoding": "utf-8"
+            }
+        ],
+        "projectSettings": {
+            "framework": None
+        }
+    }
+
+    # Add optional IDs if present (needed specific team context)
+    # params = {}
+    # if os.environ.get('VERCEL_TEAM_ID'):
+    #     params['teamId'] = os.environ.get('VERCEL_TEAM_ID')
+
+    print(f"Deploying {project_name} to Vercel API...")
     
-    # 3. Create vercel.json configuration to force static handling and no directory listing
-    vercel_config = '{"cleanUrls": true}'
-    with open(deploy_dir / 'vercel.json', 'w') as f:
-        f.write(vercel_config)
-    
-    print(f"Deploying {project_name} to Vercel...")
-    
-    # 4. Run Vercel
-    # We use 'npx vercel --prod --yes' to deploy immediately to production without prompts
-    # shell=True is CRITICAL on Windows to find npx.cmd
     try:
-        # Check if logged in first (optional, but good UX)
-        # subprocess.run(["npx", "vercel", "whoami"], shell=(os.name == 'nt'), check=False)
-
-        cmd = [
-            "npx", "-y", "vercel",
-            "--prod",      # Production deployment
-            "--yes",       # Skip confirmation prompts
-            "--name", project_name, 
-            "--cwd", str(deploy_dir) # Run in the deploy folder
-        ]
+        import requests
+        response = requests.post(url, json=payload, headers=headers)
         
-        # Run command
-        process = subprocess.run(cmd, check=True, capture_output=True, text=True, shell=(os.name == 'nt'))
-        
-        # Extract URL from stdout (Vercel prints the url as the last line usually)
-        output_lines = process.stdout.strip().split('\n')
-        # Filter for url (simple heuristic: starts with https)
-        deploy_url = next((line for line in reversed(output_lines) if line.startswith('https://')), None)
-        
-        if deploy_url:
-            print("\n" + "="*50)
-            print(f"[OK] DEPLOY SUCCESS: {deploy_url}")
-            print("="*50)
+        if response.status_code != 200:
+            print(f"[FAIL] API Error {response.status_code}: {response.text}")
+            return 1
             
-            # Save the URL
-            with open(deploy_root / '.tmp' / 'last_deployment_url.txt', 'w') as f:
-                f.write(deploy_url)
+        data = response.json()
+        deploy_url = f"https://{data['url']}" # The preview URL
+        
+        # Check alias/production
+        # For instantprod, the random URL is usually fine, or we can look at alias
+        # but instant deployment returns the deployment url immediately
+        
+        print("\n" + "="*50)
+        print(f"[OK] DEPLOY SUCCESS: {deploy_url}")
+        print("="*50)
+        
+        # Save URL for other tools
+        # Use /tmp on Vercel
+        if os.environ.get("VERCEL"):
+            tmp = Path("/tmp")
         else:
-            print("[INFO] Deploy completed but couldn't parse URL. Output below:")
-            print(process.stdout)
+            tmp = PROJECT_ROOT
             
-    except subprocess.CalledProcessError as e:
-        print(f"[FAIL] Deploy Failed. Error Code: {e.returncode}")
-        print(f"Stderr: {e.stderr}")
-        print("\nNOTE: You may need to login first. Run: 'npx vercel login'")
+        save_dir = tmp / '.tmp'
+        save_dir.mkdir(parents=True, exist_ok=True)
+            
+        with open(save_dir / 'last_deployment_url.txt', 'w') as f:
+            f.write(deploy_url)
+            
+    except ImportError:
+        print("requests library missing. Please install requests.")
+        return 1
+    except Exception as e:
+        print(f"[FAIL] Unexpected error: {e}")
         return 1
 
     return 0
