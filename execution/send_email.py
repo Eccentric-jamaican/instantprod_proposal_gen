@@ -22,6 +22,8 @@ from googleapiclient.errors import HttpError
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
+import auth_helper
+
 # Same scopes as test_google_auth.py
 SCOPES = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -30,28 +32,32 @@ SCOPES = [
     'https://www.googleapis.com/auth/gmail.send',
 ]
 
-TOKEN_FILE = PROJECT_ROOT / 'token.json'
-CREDENTIALS_FILE = PROJECT_ROOT / 'credentials.json'
-
 def get_gmail_service():
     """Get authenticated Gmail service."""
+    
+    # Restore credentials to standard paths (or /tmp)
+    creds_path, token_path = auth_helper.restore_credentials() # This handles Vercel /tmp logic
+    
     creds = None
-    if TOKEN_FILE.exists():
-        creds = Credentials.from_authorized_user_file(str(TOKEN_FILE), SCOPES)
+    if token_path.exists():
+        creds = Credentials.from_authorized_user_file(str(token_path), SCOPES)
     
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
+            print("Refreshing expired token...")
             creds.refresh(Request())
         else:
-            if not CREDENTIALS_FILE.exists():
-                raise FileNotFoundError("credentials.json not found.")
+            if not creds_path.exists():
+                raise FileNotFoundError(f"credentials.json not found at {creds_path}")
             
+            # Interactive flow (only works locally)
             flow = InstalledAppFlow.from_client_secrets_file(
-                str(CREDENTIALS_FILE), SCOPES
+                str(creds_path), SCOPES
             )
             creds = flow.run_local_server(port=0)
         
-        with open(TOKEN_FILE, 'w') as token:
+        # Save refreshed token
+        with open(token_path, 'w') as token:
             token.write(creds.to_json())
             
     return build('gmail', 'v1', credentials=creds)
