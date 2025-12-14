@@ -227,6 +227,18 @@ async def handle_messages(request: Request):
     await SseServerTransport.handle_post_message(request.scope, request.receive, request._send)
 
 
+
+@app.get("/gpt-schema.json")
+async def get_gpt_schema():
+    """
+    Forcefully return schema with 'servers' block for ChatGPT.
+    """
+    schema = app.openapi()
+    schema["servers"] = [
+        {"url": "https://instantprod-proposal-gen.vercel.app", "description": "Production Server"}
+    ]
+    return schema
+
 @app.get("/")
 async def root():
     """API root."""
