@@ -24,6 +24,8 @@ from pathlib import Path
 from datetime import datetime
 from typing import Any, Optional
 
+from starlette.requests import Request
+from starlette.responses import StreamingResponse
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -56,7 +58,10 @@ from mcp_server import (
     read_resource,
     PROJECT_ROOT,
     DIRECTIVES_DIR,
+    DIRECTIVES_DIR,
+    server as mcp_server_instance # Import the server instance
 )
+from mcp.server.sse import SseServerTransport
 
 # Initialize FastAPI
 app = FastAPI(
@@ -173,6 +178,9 @@ class SearchRequest(BaseModel):
 
 class FetchRequest(BaseModel):
     """Request for fetch tool."""
+    id: str
+
+
     id: str
 
 
