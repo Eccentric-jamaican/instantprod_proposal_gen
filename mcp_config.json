@@ -1,0 +1,10 @@
+{
+    "mcpServers": {
+        "instantprod-proposals": {
+            "command": "python",
+            "args": [
+                "c:/Users/Addis/py/instantprod_proposal_gen/mcp_server.py"
+            ]
+        }
+    }
+}
