@@ -58,8 +58,7 @@ from mcp_server import (
     read_resource,
     PROJECT_ROOT,
     DIRECTIVES_DIR,
-    DIRECTIVES_DIR,
-    server as mcp_server_instance # Import the server instance
+    server as mcp_server_instance,
 )
 from mcp.server.sse import SseServerTransport
 
@@ -185,12 +184,48 @@ class FetchRequest(BaseModel):
 
 
 # =============================================================================
-# ENDPOINTS
+# SSE ENDPOINTS (For ChatGPT MCP Connector)
 # =============================================================================
+
+@app.get("/sse")
+async def handle_sse(request: Request):
+    """
+    Establish an SSE connection for MCP Protocol.
+    Required for ChatGPT 'New App' / Connector.
+    """
+    transport = SseServerTransport("/messages")
+    
+    async def sse_generator():
+        try:
+            async with transport.connect_sse(request.scope, request.receive, request._send) as streams:
+                read_stream, write_stream = streams
+                
+                # Run the server for this connection
+                # We create initialization options properly
+                await mcp_server_instance.run(
+                    read_stream,
+                    write_stream,
+                    mcp_server_instance.create_initialization_options()
+                )
+        except Exception:
+            pass
+            
+    return StreamingResponse(transport.incoming_messages(), media_type="text/event-stream")
+
+
+@app.post("/messages")
+async def handle_messages(request: Request):
+    """
+    Handle incoming JSON-RPC messages for the SSE transport.
+    """
+    # Simply forward the request to the transport handler
+    # The mcp library handles routing based on session ID in URL
+    await SseServerTransport.handle_post_message(request.scope, request.receive, request._send)
+
 
 @app.get("/")
 async def root():
-    """API root - returns basic info."""
+    """API root."""
     return {
         "name": "InstantProd Proposal Generator API",
         "version": "1.0.0",
