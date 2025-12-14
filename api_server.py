@@ -29,6 +29,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 
+# Restore credentials from env vars (for Railway deployment)
+import auth_helper
+auth_helper.restore_credentials()
+
 # Import from MCP server
 sys.path.insert(0, str(Path(__file__).parent))
 from mcp_server import (
