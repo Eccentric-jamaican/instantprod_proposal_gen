@@ -669,6 +669,15 @@ def main(action, sheet_id, sheet_name, data, row, cell, value, updates, query, c
     print(f"[...] Connecting to Google Sheets...")
     service = get_sheets_service()
     print(f"[OK] Connected to sheet: {target_sheet_id}")
+
+    if action not in {'metadata', 'list-sheets'}:
+        if range and '!' in range:
+            sheet_name = get_sheet_name_from_range(range)
+        else:
+            sheets = list_sheets(service, target_sheet_id)
+            sheet_titles = [s.get('title') for s in sheets if s.get('title')]
+            if sheet_titles and (not sheet_name or sheet_name == 'Sheet1'):
+                sheet_name = sheet_titles[0]
     
     if action == 'read':
         rows = read_sheet(service, target_sheet_id, range_name=range, sheet_name=sheet_name)
