@@ -100,7 +100,9 @@ SCHEMA & CONSTRAINTS (backend or other inputs will set `date`, `prepared_by`, an
 @click.option('--transcript', required=True, type=click.Path(exists=True), help='Path to transcript text file')
 @click.option('--model', default='gpt-5-nano', help='OpenAI model to use')
 @click.option('--output', default=None, help='Output JSON path')
-def main(transcript, model, output):
+@click.option('--additional-context', default=None, help='Additional context to use when generating the proposal JSON')
+@click.option('--additional-context-path', default=None, type=click.Path(exists=True), help='Path to a file containing additional context')
+def main(transcript, model, output, additional_context, additional_context_path):
     """Analyze transcript and generate proposal data JSON."""
     
     api_key = os.getenv("OPENAI_API_KEY")
@@ -118,6 +120,24 @@ def main(transcript, model, output):
     with open(transcript_path, 'r', encoding='utf-8') as f:
         transcript_text = f.read()
 
+    additional_context_text = None
+    if additional_context_path:
+        additional_context_path = Path(additional_context_path)
+        with open(additional_context_path, 'r', encoding='utf-8') as f:
+            additional_context_text = f.read()
+    elif additional_context:
+        additional_context_text = str(additional_context)
+
+    if additional_context_text and len(additional_context_text) > 0:
+        user_content = (
+            "Here is the transcript:\n\n"
+            f"{transcript_text}\n\n"
+            "Additional context (use this to resolve factual details and preferences when the transcript is ambiguous; still follow the schema constraints):\n\n"
+            f"{additional_context_text}"
+        )
+    else:
+        user_content = f"Here is the transcript:\n\n{transcript_text}"
+
     print(f"Analyzing with {model}...")
     
     try:
@@ -125,7 +145,7 @@ def main(transcript, model, output):
             model=model,
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": f"Here is the transcript:\n\n{transcript_text}"}
+                {"role": "user", "content": user_content}
             ]
         )
         

@@ -14,6 +14,10 @@ Automate the extraction of structured proposal data (Goals, Problems, Solution, 
     *   Action: Sends transcript to an LLM (OpenAI).
     *   Prompt: Extracts client goals, problem factors, solution, timeline, and investment plan into our JSON schema.
 
+    *   Optional: Provide additional context alongside the transcript:
+        *   `--additional-context "..."`
+        *   `--additional-context-path path/to/context.txt`
+
 ### Voice & POV Requirements (Important)
 - The proposal copy should read as if **InstantProd is speaking directly to the business owner / decision maker**.
 - Use **first-person plural** for InstantProd ("we", "our", "us") and **second-person** for the client ("you", "your").
@@ -59,6 +63,9 @@ The LLM must output:
 ```bash
 # Analyze transcript
 python execution/analyze_transcript.py --transcript .tmp/transcripts/acme.txt
+
+# Analyze transcript with extra context
+python execution/analyze_transcript.py --transcript .tmp/transcripts/acme.txt --additional-context "Extra notes about the offer and priorities"
 
 # Generate proposal from resulting JSON
 python execution/generate_proposal.py --client-data .tmp/transcripts/acme_data.json --output .tmp/proposals/acme.html --open-browser
