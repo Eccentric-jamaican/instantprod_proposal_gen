@@ -12,7 +12,29 @@ from dotenv import load_dotenv
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-load_dotenv(override=True)
+load_dotenv()
+
+
+def _get_env_int(name: str, default: int) -> int:
+    raw = os.environ.get(name)
+    if raw is None or raw == "":
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        print(f"[WARN] Invalid {name}={raw!r}. Using default {default}.")
+        return default
+
+
+def _get_env_float(name: str, default: float) -> float:
+    raw = os.environ.get(name)
+    if raw is None or raw == "":
+        return default
+    try:
+        return float(raw)
+    except ValueError:
+        print(f"[WARN] Invalid {name}={raw!r}. Using default {default}.")
+        return default
 
 @click.command()
 @click.option('--proposal', required=True, type=click.Path(exists=True), help='Path to HTML proposal file')
@@ -92,11 +114,11 @@ def main(proposal: str, client_slug: str):
     
     try:
         import requests
-        max_attempts = int(os.environ.get("VERCEL_DEPLOY_MAX_ATTEMPTS", "4"))
-        connect_timeout = float(os.environ.get("VERCEL_DEPLOY_CONNECT_TIMEOUT", "10"))
-        read_timeout = float(os.environ.get("VERCEL_DEPLOY_READ_TIMEOUT", "120"))
+        max_attempts = _get_env_int("VERCEL_DEPLOY_MAX_ATTEMPTS", 4)
+        connect_timeout = _get_env_float("VERCEL_DEPLOY_CONNECT_TIMEOUT", 10.0)
+        read_timeout = _get_env_float("VERCEL_DEPLOY_READ_TIMEOUT", 120.0)
         timeout = (connect_timeout, read_timeout)
-        backoff_base = float(os.environ.get("VERCEL_DEPLOY_BACKOFF_BASE", "1"))
+        backoff_base = _get_env_float("VERCEL_DEPLOY_BACKOFF_BASE", 1.0)
 
         attempt = 1
         response = None
