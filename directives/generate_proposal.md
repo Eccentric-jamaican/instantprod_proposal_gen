@@ -16,7 +16,7 @@ The proposal follows this section flow:
 ## Inputs
 - **Client Data**: JSON containing all placeholder values (see below)
 - **Logo Image**: Path to logo image (will be embedded as data URI)
-- **Hero Image** (optional): Path to hero image for the proposal header
+- **Hero Image** (optional) — CLI flag: `--hero`: Path to hero image for the proposal header
 - **Output Path**: Where to save the generated proposal
 
 ### Required Client Data Fields
@@ -117,6 +117,7 @@ The `investment` field should be one of:
 python execution/generate_proposal.py \
   --client-data .tmp/client_acme.json \
   --logo assets/logo.png \
+  --hero assets/hero.jpg \
   --output .tmp/proposals/acme_proposal.html
 
 # Generate with inline data
