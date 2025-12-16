@@ -59,8 +59,14 @@ load_dotenv()
 
 # Setup paths
 PROJECT_ROOT = Path(__file__).parent.parent
-CREDENTIALS_FILE = PROJECT_ROOT / 'credentials.json'
-TOKEN_FILE = PROJECT_ROOT / 'token.json'
+sys.path.insert(0, str(PROJECT_ROOT))
+
+try:
+    import auth_helper
+    CREDENTIALS_FILE, TOKEN_FILE = auth_helper.restore_credentials()
+except ImportError:
+    CREDENTIALS_FILE = PROJECT_ROOT / 'credentials.json'
+    TOKEN_FILE = PROJECT_ROOT / 'token.json'
 
 # Google Sheets API scope
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
