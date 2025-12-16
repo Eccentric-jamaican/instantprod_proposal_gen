@@ -92,7 +92,7 @@ def build_placeholder_map(data: Dict[str, Any], logo_path: Optional[Path] = None
     placeholders = {}
     
     # Header fields
-    placeholders['COMPANY'] = escape_html(data.get('company', 'Company'))
+    placeholders['COMPANY'] = escape_html(data.get('company', 'InstantProd'))
     placeholders['CLIENT_NAME'] = escape_html(data.get('client_name', 'Client'))
     placeholders['WEBSITE'] = escape_html(data.get('website', ''))
     placeholders['PREPARED_BY'] = escape_html(data.get('prepared_by', 'InstantProd'))

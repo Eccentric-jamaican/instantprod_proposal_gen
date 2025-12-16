@@ -21,13 +21,20 @@ Business context (for consistency only; do not restate full legal text):
 - Work is delivered on the client's stack as an independent contractor.
 - Client and lead data is handled under our Privacy Policy and Data Processing terms; we do not sell personal data.
 
+VOICE & POV (CRITICAL):
+- Write the proposal copy as if InstantProd is speaking directly to the business owner / decision maker.
+- Use first-person plural for InstantProd ("we", "our", "us") and second-person for the client ("you", "your").
+- Keep it confident and specific to the transcript. Do not sound like a third-party narrator (avoid "they" / "the client" / "InstantProd will").
+- Example tone:
+  - problem: "You're losing qualified leads because ..."
+  - solution: "We'll redesign ... so you can ..."
+
 CRITICAL: You must output PURE JSON. No markdown. No `json` wrappers.
 
 Guardrails for UI Integrity:
 1. **Brevity is King**: The UI breaks if text is too long. Keep "problem" and "solution" to MAX 2 sentences.
 2. **Exact Counts**: 
    - `goals`: Return at least 3 items and include all distinct goals mentioned in the transcript. There is no maximum, but keep each goal short.
-   - `process_steps`: MUST have exactly 3 items.
    - `why_us`: MUST have exactly 2 items.
    - `invest_notes`: MUST have exactly 4 short bullet points.
 3. **Cleaning**: Do NOT use markdown bolding (e.g. `**text**`). Use HTML `<strong>` if absolutely necessary, but prefer plain text.

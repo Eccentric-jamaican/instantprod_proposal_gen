@@ -274,6 +274,35 @@ async def list_tools() -> list[Tool]:
             }
         ),
         Tool(
+            name="send_trello_invite_email",
+            description="""Send a branded Trello board invite email via Gmail.
+            
+            Uses the InstantProd dark-mode email template for Trello invites.
+            Requires Gmail API authentication (credentials.json must be set up).""",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "to_email": {
+                        "type": "string",
+                        "description": "Recipient email address"
+                    },
+                    "client_name": {
+                        "type": "string",
+                        "description": "Client name for personalization"
+                    },
+                    "trello_link": {
+                        "type": "string",
+                        "description": "URL to the Trello board"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "description": "Email subject (optional, defaults to 'Your Trello Board - InstantProd')"
+                    }
+                },
+                "required": ["to_email", "client_name", "trello_link"]
+            }
+        ),
+        Tool(
             name="quick_proposal",
             description="""Run the full proposal pipeline in one step.
             
@@ -509,6 +538,8 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             return await handle_deploy_proposal(arguments)
         elif name == "send_proposal_email":
             return await handle_send_email(arguments)
+        elif name == "send_trello_invite_email":
+            return await handle_send_trello_invite_email(arguments)
         elif name == "quick_proposal":
             return await handle_quick_proposal(arguments)
         elif name == "read_sheet":
@@ -717,6 +748,40 @@ async def handle_send_email(args: dict) -> list[TextContent]:
 **To:** {to_email}
 **Subject:** {subject}
 **Link:** {proposal_link}"""
+    )]
+
+
+async def handle_send_trello_invite_email(args: dict) -> list[TextContent]:
+    """Send Trello board invite email."""
+    to_email = args.get("to_email")
+    client_name = args.get("client_name")
+    trello_link = args.get("trello_link")
+    subject = args.get("subject", "Your Trello Board - InstantProd")
+
+    if not all([to_email, client_name, trello_link]):
+        return [TextContent(type="text", text="Error: to_email, client_name, and trello_link are required")]
+
+    success, output = run_script('send_email.py', [
+        '--to', to_email,
+        '--subject', subject,
+        '--body', f"Your Trello board is ready: {trello_link}",
+        '--client-name', client_name,
+        '--link', trello_link,
+        '--template', 'trello_invite_email_template.html',
+        '--button-text', 'ACCESS YOUR BOARD',
+        '--instruction-text', 'Click the button below to access your Trello board.'
+    ])
+
+    if not success:
+        return [TextContent(type="text", text=f"Email failed:\n{output}")]
+
+    return [TextContent(
+        type="text",
+        text=f"""✅ Trello invite email sent!
+
+**To:** {to_email}
+**Subject:** {subject}
+**Link:** {trello_link}"""
     )]
 
 
