@@ -152,6 +152,7 @@ def render_template(template_path: Path, replacements: dict) -> str:
 @click.option('--template', default='email_template.html', help='HTML template filename in project root')
 @click.option('--button-text', default=None, help='Override CTA button text in template')
 @click.option('--instruction-text', default=None, help='Override instruction text in template')
+@click.option('--plain', is_flag=True, help='Send as plain text only (skip HTML template)')
 def main(
     to: str,
     subject: str,
@@ -162,7 +163,8 @@ def main(
     link: Optional[str],
     template: str,
     button_text: Optional[str],
-    instruction_text: Optional[str]
+    instruction_text: Optional[str],
+    plain: bool
 ):
     """Send an email via Gmail API with HTML template support."""
     try:
@@ -176,7 +178,7 @@ def main(
         # Prepare HTML content
         template_file = PROJECT_ROOT / template
         html_content = None
-        if template_file.exists():
+        if not plain and template_file.exists():
             print("Using HTML Email Template...")
             
             # Use provided link or fallback to '#' if likely sending an attachment
