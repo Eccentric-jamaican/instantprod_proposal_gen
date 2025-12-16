@@ -122,13 +122,13 @@ def main(transcript, model, output, additional_context, additional_context_path)
 
     additional_context_text = None
     if additional_context_path:
-        additional_context_path = Path(additional_context_path)
-        with open(additional_context_path, 'r', encoding='utf-8') as f:
+        context_path = Path(additional_context_path)
+        with open(context_path, 'r', encoding='utf-8') as f:
             additional_context_text = f.read()
     elif additional_context:
-        additional_context_text = str(additional_context)
+        additional_context_text = additional_context
 
-    if additional_context_text and len(additional_context_text) > 0:
+    if additional_context_text:
         user_content = (
             "Here is the transcript:\n\n"
             f"{transcript_text}\n\n"

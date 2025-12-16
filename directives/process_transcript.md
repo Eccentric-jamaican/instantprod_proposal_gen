@@ -68,6 +68,9 @@ python execution/analyze_transcript.py --transcript .tmp/transcripts/acme.txt
 # Analyze transcript with research findings
 python execution/analyze_transcript.py --transcript .tmp/transcripts/acme.txt --additional-context "Client has no website, active on Instagram with 2k followers, targets local Jamaica market, competitors have outdated sites"
 
+# Analyze transcript with research from a file
+python execution/analyze_transcript.py --transcript .tmp/transcripts/acme.txt --additional-context-path .tmp/transcripts/acme_research.txt
+
 # Generate proposal from resulting JSON
 python execution/generate_proposal.py --client-data .tmp/transcripts/acme_data.json --output .tmp/proposals/acme.html --open-browser
 ```
