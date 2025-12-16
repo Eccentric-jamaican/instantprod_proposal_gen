@@ -149,7 +149,21 @@ def render_template(template_path: Path, replacements: dict) -> str:
 @click.option('--client-name', default='Client', help='Client Name for HTML template')
 @click.option('--logo', type=click.Path(exists=True), help='Path to logo file')
 @click.option('--link', help='URL link to the proposal (replaces attachment)')
-def main(to: str, subject: str, body: str, attachment: Optional[str], client_name: str, logo: Optional[str], link: Optional[str]):
+@click.option('--template', default='email_template.html', help='HTML template filename in project root')
+@click.option('--button-text', default=None, help='Override CTA button text in template')
+@click.option('--instruction-text', default=None, help='Override instruction text in template')
+def main(
+    to: str,
+    subject: str,
+    body: str,
+    attachment: Optional[str],
+    client_name: str,
+    logo: Optional[str],
+    link: Optional[str],
+    template: str,
+    button_text: Optional[str],
+    instruction_text: Optional[str]
+):
     """Send an email via Gmail API with HTML template support."""
     try:
         print(f"Authenticating...")
@@ -160,7 +174,7 @@ def main(to: str, subject: str, body: str, attachment: Optional[str], client_nam
         print(f"Sending as: Authenticated User")
         
         # Prepare HTML content
-        template_file = PROJECT_ROOT / 'email_template.html'
+        template_file = PROJECT_ROOT / template
         html_content = None
         if template_file.exists():
             print("Using HTML Email Template...")
@@ -168,16 +182,20 @@ def main(to: str, subject: str, body: str, attachment: Optional[str], client_nam
             # Use provided link or fallback to '#' if likely sending an attachment
             if link:
                 proposal_link = link
-                instruction_text = "Click the button below to view and sign your proposal instantly."
+                default_instruction_text = "Click the button below to view and sign your proposal instantly."
             else:
                 proposal_link = "#"
-                instruction_text = "Please download the attached file to review your proposal."
+                default_instruction_text = "Please download the attached file to review your proposal."
+
+            final_instruction_text = instruction_text or default_instruction_text
+            final_button_text = button_text or "VIEW PROPOSAL"
             
             html_content = render_template(template_file, {
                 'CLIENT_NAME': client_name,
                 'FIRST_NAME': client_name.split(' ')[0],
                 'PROPOSAL_LINK': proposal_link,
-                'INSTRUCTION_TEXT': instruction_text
+                'INSTRUCTION_TEXT': final_instruction_text,
+                'BUTTON_TEXT': final_button_text
             })
         
         print(f"Preparing email to: {to}...")

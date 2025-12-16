@@ -2,12 +2,39 @@ import os
 import sys
 import shutil
 import subprocess
+import time
+import random
 from pathlib import Path
 import click
+from dotenv import load_dotenv
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+load_dotenv()
+
+
+def _get_env_int(name: str, default: int) -> int:
+    raw = os.environ.get(name)
+    if raw is None or raw == "":
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        print(f"[WARN] Invalid {name}={raw!r}. Using default {default}.")
+        return default
+
+
+def _get_env_float(name: str, default: float) -> float:
+    raw = os.environ.get(name)
+    if raw is None or raw == "":
+        return default
+    try:
+        return float(raw)
+    except ValueError:
+        print(f"[WARN] Invalid {name}={raw!r}. Using default {default}.")
+        return default
 
 @click.command()
 @click.option('--proposal', required=True, type=click.Path(exists=True), help='Path to HTML proposal file')
@@ -40,6 +67,9 @@ def main(proposal: str, client_slug: str):
 
     payload = {
         "name": project_name,
+        "public": True,
+        "target": "production",
+        "alias": [],
         "files": [
             {
                 "file": "index.html",
@@ -57,34 +87,89 @@ def main(proposal: str, client_slug: str):
         }
     }
 
-    # Add optional IDs if present (needed specific team context)
-    # params = {}
-    # if os.environ.get('VERCEL_TEAM_ID'):
-    #     params['teamId'] = os.environ.get('VERCEL_TEAM_ID')
+    params = {}
+    team_id = os.environ.get('VERCEL_TEAM_ID')
+    team_slug = os.environ.get('VERCEL_TEAM_SLUG')
+    if team_id:
+        params['teamId'] = team_id
+    if team_slug:
+        params['slug'] = team_slug
+
+    if team_slug:
+        payload['alias'] = [f"{project_name}-{team_slug}.vercel.app"]
+    else:
+        payload['alias'] = [f"{project_name}.vercel.app"]
+
+    if team_slug or team_id:
+        scope_bits = []
+        if team_slug:
+            scope_bits.append(f"slug={team_slug}")
+        if team_id:
+            scope_bits.append(f"teamId={team_id}")
+        print(f"Deploy scope: team ({', '.join(scope_bits)})")
+    else:
+        print("Deploy scope: personal (no VERCEL_TEAM_SLUG / VERCEL_TEAM_ID set)")
 
     print(f"Deploying {project_name} to Vercel API...")
     
     try:
         import requests
-        response = requests.post(url, json=payload, headers=headers)
-        
-        if response.status_code != 200:
-            print(f"[FAIL] API Error {response.status_code}: {response.text}")
+        max_attempts = _get_env_int("VERCEL_DEPLOY_MAX_ATTEMPTS", 4)
+        connect_timeout = _get_env_float("VERCEL_DEPLOY_CONNECT_TIMEOUT", 10.0)
+        read_timeout = _get_env_float("VERCEL_DEPLOY_READ_TIMEOUT", 120.0)
+        timeout = (connect_timeout, read_timeout)
+        backoff_base = _get_env_float("VERCEL_DEPLOY_BACKOFF_BASE", 1.0)
+
+        attempt = 1
+        response = None
+        last_error = None
+        while attempt <= max_attempts:
+            try:
+                response = requests.post(
+                    url,
+                    params=params if params else None,
+                    json=payload,
+                    headers=headers,
+                    timeout=timeout,
+                )
+                if response.status_code == 200:
+                    last_error = None
+                    break
+
+                if response.status_code not in (408, 429) and not (500 <= response.status_code <= 599):
+                    print(f"[FAIL] API Error {response.status_code}: {response.text}")
+                    return 1
+
+                last_error = f"HTTP {response.status_code}: {response.text}"
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                last_error = str(e)
+
+            if attempt >= max_attempts:
+                break
+
+            sleep_s = backoff_base * (2 ** (attempt - 1)) + random.uniform(0, 0.25)
+            print(f"[WARN] Deploy attempt {attempt} failed ({last_error}). Retrying in {sleep_s:.2f}s...")
+            time.sleep(sleep_s)
+            attempt += 1
+
+        if last_error:
+            status_part = f" (status={response.status_code})" if response is not None else ""
+            print(f"[FAIL] Deployment request failed after {max_attempts} attempts{status_part}: {last_error}")
             return 1
-            
-        data = response.json()
-        deploy_url = f"https://{data['url']}" # The preview URL
         
-        # Check alias/production
-        # For instantprod, the random URL is usually fine, or we can look at alias
-        # but instant deployment returns the deployment url immediately
+        data = response.json()
+        alias_final = data.get('aliasFinal')
+        aliases = data.get('alias') or []
+        deploy_url = (
+            f"https://{alias_final}"
+            if alias_final
+            else (f"https://{aliases[0]}" if len(aliases) > 0 else f"https://{data['url']}")
+        )
         
         print("\n" + "="*50)
         print(f"[OK] DEPLOY SUCCESS: {deploy_url}")
         print("="*50)
         
-        # Save URL for other tools
-        # Use /tmp on Vercel
         if os.environ.get("VERCEL"):
             tmp = Path("/tmp")
         else:

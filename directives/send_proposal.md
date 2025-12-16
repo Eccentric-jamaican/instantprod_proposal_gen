@@ -39,7 +39,7 @@ Send the generated HTML proposal to the client in a way that ensures they can op
 ## Automation
 
 ### 1. Hosted Workflow (Recommended)
-This method deploys the proposal to Vercel and emails a secure link. No unzipping required.
+This method deploys the proposal to Vercel and emails a shareable link. No unzipping required.
 
 1.  **Deploy**:
     ```bash
@@ -54,6 +54,10 @@ This method deploys the proposal to Vercel and emails a secure link. No unzippin
       --client-name "Client Name" \
       --link "https://..."
     ```
+
+#### Notes
+- The email uses an HTML template by default (`email_template.html`).
+- The CTA button text is controlled by the template placeholder `{{BUTTON_TEXT}}`.
 
 ### 2. Attachment Workflow (Legacy)
 Use this if the client requires a physical file.
@@ -71,3 +75,19 @@ python execution/send_email.py \
 *   **HTML Template**: Automatically loads `email_template.html`.
 *   **Branding**: Uses your hosted logo URL.
 *   **Smart Content**: Automatically switches between "Click to View" (Link) and "Download" (Attachment) instructions.
+
+## Trello Board Invite Email
+Use this when you want to invite the client into their Trello board with branded email.
+
+### Send (CLI)
+```bash
+python execution/send_email.py \
+  --to "client@example.com" \
+  --subject "Your Trello Board - InstantProd" \
+  --body "Your Trello board is ready" \
+  --client-name "Client Name" \
+  --link "https://trello.com/invite/..." \
+  --template trello_invite_email_template.html \
+  --button-text "ACCESS YOUR BOARD" \
+  --instruction-text "Click the button below to access your Trello board."
+```

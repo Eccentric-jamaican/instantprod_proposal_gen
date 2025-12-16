@@ -42,6 +42,7 @@ from mcp_server import (
     handle_generate_proposal,
     handle_deploy_proposal,
     handle_send_email,
+    handle_send_trello_invite_email,
     handle_quick_proposal,
     handle_read_sheet,
     handle_find_client,
@@ -135,6 +136,14 @@ class SendEmailRequest(BaseModel):
     to_email: str
     client_name: str
     proposal_link: str
+    subject: Optional[str] = None
+
+
+class SendTrelloInviteEmailRequest(BaseModel):
+    """Request for send_trello_invite_email tool."""
+    to_email: str
+    client_name: str
+    trello_link: str
     subject: Optional[str] = None
 
 
@@ -332,6 +341,18 @@ async def send_proposal_email(request: SendEmailRequest):
     return {"result": result[0].text}
 
 
+@app.post("/tools/send_trello_invite_email", dependencies=[Depends(verify_api_key)])
+async def send_trello_invite_email(request: SendTrelloInviteEmailRequest):
+    """Send a branded email with the Trello board link via Gmail."""
+    result = await handle_send_trello_invite_email({
+        "to_email": request.to_email,
+        "client_name": request.client_name,
+        "trello_link": request.trello_link,
+        "subject": request.subject
+    })
+    return {"result": result[0].text}
+
+
 @app.post("/tools/quick_proposal", dependencies=[Depends(verify_api_key)])
 async def quick_proposal(request: QuickProposalRequest):
     """Run the full proposal pipeline (analyze → generate → deploy)."""
@@ -420,6 +441,7 @@ async def execute_tool(tool_name: str, request: ToolRequest):
         "generate_proposal": handle_generate_proposal,
         "deploy_proposal": handle_deploy_proposal,
         "send_proposal_email": handle_send_email,
+        "send_trello_invite_email": handle_send_trello_invite_email,
         "quick_proposal": handle_quick_proposal,
         "read_sheet": handle_read_sheet,
         "find_client": handle_find_client,

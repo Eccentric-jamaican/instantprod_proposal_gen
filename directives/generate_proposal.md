@@ -9,13 +9,14 @@ The proposal follows this section flow:
 2. **Your Goals** — Dynamic list of client goals (3–10+ items from transcript)
 3. **Problem Factors** — 4 specific problem factors getting in the way
 4. **My Pitch & Proposed Solutions** — Solution summary + 4 deliverables + timeline
-5. **Terms & Monthly Subscription** — Pricing, bank details, notes
-6. **Signature** — Digital signature pad with smooth Bezier curves
+5. **How to work with us** — Static (non-dynamic) section describing the working process
+6. **Terms & Monthly Subscription** — Pricing, bank details, notes
+7. **Signature** — Digital signature pad with smooth Bezier curves
 
 ## Inputs
 - **Client Data**: JSON containing all placeholder values (see below)
 - **Logo Image**: Path to logo image (will be embedded as data URI)
-- **Hero Image** (optional): Path to hero image for the proposal header
+- **Hero Image** (optional) — CLI flag: `--hero`: Path to hero image for the proposal header
 - **Output Path**: Where to save the generated proposal
 
 ### Required Client Data Fields
@@ -106,6 +107,9 @@ The `investment` field should be one of:
 - **Special characters**: HTML-escape any user content to prevent XSS
 - **Long content**: Some fields may overflow; consider character limits
 
+## Defaults
+- If `company` is missing in the JSON input, proposals default to `InstantProd`.
+
 ## Example Usage
 
 ```bash
@@ -113,6 +117,7 @@ The `investment` field should be one of:
 python execution/generate_proposal.py \
   --client-data .tmp/client_acme.json \
   --logo assets/logo.png \
+  --hero assets/hero.jpg \
   --output .tmp/proposals/acme_proposal.html
 
 # Generate with inline data
