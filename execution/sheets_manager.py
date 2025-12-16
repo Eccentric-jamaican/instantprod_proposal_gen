@@ -670,14 +670,30 @@ def main(action, sheet_id, sheet_name, data, row, cell, value, updates, query, c
     service = get_sheets_service()
     print(f"[OK] Connected to sheet: {target_sheet_id}")
 
+    # Auto-resolve sheet name for actions that need it
     if action not in {'metadata', 'list-sheets'}:
         if range and '!' in range:
+            # Extract sheet name from range notation
             sheet_name = get_sheet_name_from_range(range)
-        else:
-            sheets = list_sheets(service, target_sheet_id)
-            sheet_titles = [s.get('title') for s in sheets if s.get('title')]
-            if sheet_titles and (not sheet_name or sheet_name == 'Sheet1'):
-                sheet_name = sheet_titles[0]
+        elif not sheet_name or sheet_name == 'Sheet1':
+            # Only fetch sheets if we need to auto-resolve
+            try:
+                sheets = list_sheets(service, target_sheet_id)
+                sheet_titles = [s.get('title') for s in sheets if s.get('title')]
+
+                if not sheet_titles:
+                    print("[ERROR] No sheets found in spreadsheet")
+                    return 1
+
+                # Keep 'Sheet1' if it actually exists
+                if sheet_name == 'Sheet1' and 'Sheet1' in sheet_titles:
+                    pass
+                else:
+                    sheet_name = sheet_titles[0]
+                    print(f"[INFO] Using sheet: {sheet_name}")
+            except Exception as e:
+                print(f"[ERROR] Failed to list sheets: {e}")
+                return 1
     
     if action == 'read':
         rows = read_sheet(service, target_sheet_id, range_name=range, sheet_name=sheet_name)
