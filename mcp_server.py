@@ -282,6 +282,35 @@ async def list_tools() -> list[Tool]:
             }
         ),
         Tool(
+            name="send_plain_email",
+            description="""Send a plain-text email via Gmail.
+            
+            This sends a normal plain text email (no HTML template).
+            Requires Gmail API authentication (credentials.json must be set up).""",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "to_email": {
+                        "type": "string",
+                        "description": "Recipient email address"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "description": "Email subject (optional, defaults to 'Message from InstantProd')"
+                    },
+                    "body": {
+                        "type": "string",
+                        "description": "Plain text body"
+                    },
+                    "attachment_path": {
+                        "type": "string",
+                        "description": "Optional path to a file attachment"
+                    }
+                },
+                "required": ["to_email", "body"]
+            }
+        ),
+        Tool(
             name="send_trello_invite_email",
             description="""Send a branded Trello board invite email via Gmail.
             
@@ -554,6 +583,8 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             return await handle_deploy_proposal(arguments)
         elif name == "send_proposal_email":
             return await handle_send_email(arguments)
+        elif name == "send_plain_email":
+            return await handle_send_plain_email(arguments)
         elif name == "send_trello_invite_email":
             return await handle_send_trello_invite_email(arguments)
         elif name == "quick_proposal":
@@ -785,6 +816,47 @@ async def handle_send_email(args: dict) -> list[TextContent]:
 **To:** {to_email}
 **Subject:** {subject}
 **Link:** {proposal_link}"""
+    )]
+
+
+async def handle_send_plain_email(args: dict) -> list[TextContent]:
+    """Send plain text email."""
+    to_email = args.get("to_email")
+    subject = args.get("subject", "Message from InstantProd")
+    body = args.get("body")
+    attachment_path = args.get("attachment_path")
+
+    if not to_email or body is None:
+        return [TextContent(type="text", text="Error: to_email and body are required")]
+
+    cmd_args = [
+        '--to', to_email,
+        '--subject', subject,
+        '--body', str(body),
+        '--plain'
+    ]
+
+    if attachment_path:
+        path = Path(attachment_path).resolve()
+        try:
+            path.relative_to(PROJECT_ROOT)
+        except ValueError:
+            return [TextContent(type="text", text=f"Error: attachment_path must be within project directory: {attachment_path}")]
+        if not path.exists():
+            return [TextContent(type="text", text=f"Error: attachment_path not found: {attachment_path}")]
+        cmd_args.extend(['--attachment', str(path)])
+
+    success, output = run_script('send_email.py', cmd_args)
+
+    if not success:
+        return [TextContent(type="text", text=f"Email failed:\n{output}")]
+
+    return [TextContent(
+        type="text",
+        text=f"""✅ Plain text email sent!
+
+**To:** {to_email}
+**Subject:** {subject}"""
     )]
 
 

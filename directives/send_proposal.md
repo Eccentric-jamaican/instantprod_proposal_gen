@@ -76,6 +76,28 @@ python execution/send_email.py \
 *   **Branding**: Uses your hosted logo URL.
 *   **Smart Content**: Automatically switches between "Click to View" (Link) and "Download" (Attachment) instructions.
 
+## Plain Text Email (Utility)
+Use this for normal emails that should NOT use the HTML template.
+
+### Send (CLI)
+```bash
+python execution/send_email.py \
+  --to "client@example.com" \
+  --subject "Quick follow-up" \
+  --body "Hey — quick follow up on our last message." \
+  --plain
+```
+
+### Optional Attachment (CLI)
+```bash
+python execution/send_email.py \
+  --to "client@example.com" \
+  --subject "File attached" \
+  --body "See attached." \
+  --attachment .tmp/some_file.pdf \
+  --plain
+```
+
 ## Trello Board Invite Email
 Use this when you want to invite the client into their Trello board with branded email.
 
