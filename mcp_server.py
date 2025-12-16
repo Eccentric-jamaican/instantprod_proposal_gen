@@ -182,6 +182,14 @@ async def list_tools() -> list[Tool]:
                     "client_name": {
                         "type": "string",
                         "description": "Client or company name (used for file naming)"
+                    },
+                    "additional_context": {
+                        "type": "string",
+                        "description": "Optional research findings about the client (e.g., online presence, website analysis, social media, industry insights) to include alongside the transcript"
+                    },
+                    "additional_context_path": {
+                        "type": "string",
+                        "description": "Optional path to a file containing research findings about the client"
                     }
                 },
                 "required": ["transcript_text", "client_name"]
@@ -322,6 +330,14 @@ async def list_tools() -> list[Tool]:
                     "transcript_text": {
                         "type": "string",
                         "description": "The full transcript text from the call"
+                    },
+                    "additional_context": {
+                        "type": "string",
+                        "description": "Optional research findings about the client (e.g., online presence, website analysis, social media, industry insights) to include alongside the transcript"
+                    },
+                    "additional_context_path": {
+                        "type": "string",
+                        "description": "Optional path to a file containing research findings about the client"
                     }
                 },
                 "required": ["client_name", "transcript_text"]
@@ -574,6 +590,8 @@ async def handle_analyze_transcript(args: dict) -> list[TextContent]:
     """Analyze a transcript and extract proposal data."""
     transcript_text = args.get("transcript_text", "")
     client_name = args.get("client_name", "client")
+    additional_context = args.get("additional_context")
+    additional_context_path = args.get("additional_context_path")
     
     if not transcript_text:
         return [TextContent(type="text", text="Error: transcript_text is required")]
@@ -585,11 +603,30 @@ async def handle_analyze_transcript(args: dict) -> list[TextContent]:
     
     with open(transcript_file, 'w', encoding='utf-8') as f:
         f.write(transcript_text)
-    
+
     # Run analysis
-    success, output = run_script('analyze_transcript.py', [
-        '--transcript', str(transcript_file)
-    ])
+    cmd_args = ['--transcript', str(transcript_file)]
+
+    context_file = None
+    if additional_context_path:
+        context_path = Path(additional_context_path).resolve()
+        # Validate path stays within allowed base directory
+        try:
+            context_path.relative_to(PROJECT_ROOT)
+        except ValueError:
+            return [TextContent(type="text", text=f"Error: additional_context_path must be within project directory: {additional_context_path}")]
+        if not context_path.exists():
+            return [TextContent(type="text", text=f"Error: additional_context_path not found: {additional_context_path}")]
+        context_file = context_path
+    elif additional_context:
+        context_file = TRANSCRIPTS_DIR / f"{client_slug}_{date_str}_context.txt"
+        with open(context_file, 'w', encoding='utf-8') as f:
+            f.write(str(additional_context))
+
+    if context_file:
+        cmd_args.extend(['--additional-context-path', str(context_file)])
+
+    success, output = run_script('analyze_transcript.py', cmd_args)
     
     if not success:
         return [TextContent(type="text", text=f"Analysis failed:\n{output}")]
@@ -789,6 +826,8 @@ async def handle_quick_proposal(args: dict) -> list[TextContent]:
     """Run the full proposal pipeline."""
     client_name = args.get("client_name")
     transcript_text = args.get("transcript_text")
+    additional_context = args.get("additional_context")
+    additional_context_path = args.get("additional_context_path")
     
     if not client_name or not transcript_text:
         return [TextContent(type="text", text="Error: client_name and transcript_text are required")]
@@ -799,7 +838,9 @@ async def handle_quick_proposal(args: dict) -> list[TextContent]:
     results.append("📝 **Step 1: Analyzing transcript...**")
     analyze_result = await handle_analyze_transcript({
         "transcript_text": transcript_text,
-        "client_name": client_name
+        "client_name": client_name,
+        "additional_context": additional_context,
+        "additional_context_path": additional_context_path
     })
     
     if "failed" in analyze_result[0].text.lower():

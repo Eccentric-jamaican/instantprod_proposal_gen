@@ -117,6 +117,9 @@ class AnalyzeTranscriptRequest(BaseModel):
     transcript_text: str
     client_name: str
 
+    additional_context: Optional[str] = None
+    additional_context_path: Optional[str] = None
+
 
 class GenerateProposalRequest(BaseModel):
     """Request for generate_proposal tool."""
@@ -151,6 +154,9 @@ class QuickProposalRequest(BaseModel):
     """Request for quick_proposal tool."""
     client_name: str
     transcript_text: str
+
+    additional_context: Optional[str] = None
+    additional_context_path: Optional[str] = None
 
 
 class ReadSheetRequest(BaseModel):
