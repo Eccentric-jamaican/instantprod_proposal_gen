@@ -643,7 +643,7 @@ def query_by_column_value(service, sheet_id: str, column: str, value: str, sheet
     'delete-column', 'rename-column'
 ]), required=True, help='Action to perform')
 @click.option('--sheet-id', help='Sheet ID (overrides default/ONBOARDING_SHEET_ID)')
-@click.option('--sheet-name', default='Sheet1', help='Sheet name within spreadsheet')
+@click.option('--sheet-name', default=None, help='Sheet name within spreadsheet')
 @click.option('--data', help='JSON data for add/update actions')
 @click.option('--row', type=int, help='Row number for update action (1-indexed)')
 @click.option('--cell', help='Cell reference (e.g., "A1" or "Sheet1!A1")')
@@ -675,7 +675,7 @@ def main(action, sheet_id, sheet_name, data, row, cell, value, updates, query, c
         if range and '!' in range:
             # Extract sheet name from range notation
             sheet_name = get_sheet_name_from_range(range)
-        elif not sheet_name or sheet_name == 'Sheet1':
+        elif sheet_name is None or sheet_name == 'Sheet1':
             # Only fetch sheets if we need to auto-resolve
             try:
                 sheets = list_sheets(service, target_sheet_id)
@@ -691,7 +691,7 @@ def main(action, sheet_id, sheet_name, data, row, cell, value, updates, query, c
                 else:
                     sheet_name = sheet_titles[0]
                     print(f"[INFO] Using sheet: {sheet_name}")
-            except Exception as e:
+            except (HttpError, ValueError) as e:
                 print(f"[ERROR] Failed to list sheets: {e}")
                 return 1
     
