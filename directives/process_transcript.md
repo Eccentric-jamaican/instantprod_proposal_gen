@@ -14,6 +14,11 @@ Automate the extraction of structured proposal data (Goals, Problems, Solution, 
     *   Action: Sends transcript to an LLM (OpenAI).
     *   Prompt: Extracts client goals, problem factors, solution, timeline, and investment plan into our JSON schema.
 
+### Voice & POV Requirements (Important)
+- The proposal copy should read as if **InstantProd is speaking directly to the business owner / decision maker**.
+- Use **first-person plural** for InstantProd ("we", "our", "us") and **second-person** for the client ("you", "your").
+- Avoid third-person narration (avoid "they" / "the client" / "InstantProd will").
+
 3.  **Generate Output**:
     *   Script saves `<transcript_stem>_data.json` in the same folder.
 
@@ -44,6 +49,10 @@ The LLM must output:
 ## Setup
 - Requires `OPENAI_API_KEY` in `.env`.
 - By default, `execution/analyze_transcript.py` uses the OpenAI `gpt-5-nano` model (override with `--model` if needed).
+
+## Edge Cases & Learnings
+- Do not hallucinate numeric pricing or budgets. Map the transcript to one of the flat monthly plan strings (or use the fallback plan when ambiguous).
+- Keep text short (the HTML layout breaks if fields are too long). Follow the max word/sentence limits in the schema.
 
 ## Example Usage
 
