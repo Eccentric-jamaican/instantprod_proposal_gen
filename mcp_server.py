@@ -609,7 +609,12 @@ async def handle_analyze_transcript(args: dict) -> list[TextContent]:
 
     context_file = None
     if additional_context_path:
-        context_path = Path(additional_context_path)
+        context_path = Path(additional_context_path).resolve()
+        # Validate path stays within allowed base directory
+        try:
+            context_path.relative_to(PROJECT_ROOT)
+        except ValueError:
+            return [TextContent(type="text", text=f"Error: additional_context_path must be within project directory: {additional_context_path}")]
         if not context_path.exists():
             return [TextContent(type="text", text=f"Error: additional_context_path not found: {additional_context_path}")]
         context_file = context_path
