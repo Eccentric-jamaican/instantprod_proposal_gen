@@ -2,6 +2,8 @@ import os
 import sys
 import shutil
 import subprocess
+import time
+import random
 from pathlib import Path
 import click
 from dotenv import load_dotenv
@@ -90,12 +92,49 @@ def main(proposal: str, client_slug: str):
     
     try:
         import requests
-        response = requests.post(url, params=params if params else None, json=payload, headers=headers)
-        
-        if response.status_code != 200:
-            print(f"[FAIL] API Error {response.status_code}: {response.text}")
+        max_attempts = int(os.environ.get("VERCEL_DEPLOY_MAX_ATTEMPTS", "4"))
+        connect_timeout = float(os.environ.get("VERCEL_DEPLOY_CONNECT_TIMEOUT", "10"))
+        read_timeout = float(os.environ.get("VERCEL_DEPLOY_READ_TIMEOUT", "120"))
+        timeout = (connect_timeout, read_timeout)
+        backoff_base = float(os.environ.get("VERCEL_DEPLOY_BACKOFF_BASE", "1"))
+
+        attempt = 1
+        response = None
+        last_error = None
+        while attempt <= max_attempts:
+            try:
+                response = requests.post(
+                    url,
+                    params=params if params else None,
+                    json=payload,
+                    headers=headers,
+                    timeout=timeout,
+                )
+                if response.status_code == 200:
+                    last_error = None
+                    break
+
+                if response.status_code not in (408, 429) and not (500 <= response.status_code <= 599):
+                    print(f"[FAIL] API Error {response.status_code}: {response.text}")
+                    return 1
+
+                last_error = f"HTTP {response.status_code}: {response.text}"
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                last_error = str(e)
+
+            if attempt >= max_attempts:
+                break
+
+            sleep_s = backoff_base * (2 ** (attempt - 1)) + random.uniform(0, 0.25)
+            print(f"[WARN] Deploy attempt {attempt} failed ({last_error}). Retrying in {sleep_s:.2f}s...")
+            time.sleep(sleep_s)
+            attempt += 1
+
+        if last_error:
+            status_part = f" (status={response.status_code})" if response is not None else ""
+            print(f"[FAIL] Deployment request failed after {max_attempts} attempts{status_part}: {last_error}")
             return 1
-            
+        
         data = response.json()
         alias_final = data.get('aliasFinal')
         aliases = data.get('alias') or []
