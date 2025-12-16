@@ -42,6 +42,7 @@ Add to your Claude Desktop config (`%APPDATA%\Claude\claude_desktop_config.json`
 | `generate_proposal` | Create an HTML proposal from client data |
 | `deploy_proposal` | Deploy a proposal to Vercel and get a live URL |
 | `send_proposal_email` | Send the proposal via Gmail with branded template |
+| `send_plain_email` | Send a normal plain text email via Gmail |
 | `quick_proposal` | Full pipeline: analyze → generate → deploy → **sync to Drive** (one command!) |
 | `read_sheet` | Read data from Google Sheets onboarding database |
 | `find_client` | Search for a client in the database |
@@ -117,6 +118,7 @@ POST /tools/analyze_transcript  - Analyze transcript
 POST /tools/generate_proposal   - Generate proposal
 POST /tools/deploy_proposal     - Deploy to Vercel
 POST /tools/send_proposal_email - Send email
+POST /tools/send_plain_email    - Send plain text email
 POST /tools/quick_proposal      - Full pipeline
 POST /tools/read_sheet          - Read Google Sheet
 POST /tools/find_client         - Search for client
