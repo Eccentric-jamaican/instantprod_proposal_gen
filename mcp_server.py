@@ -185,11 +185,11 @@ async def list_tools() -> list[Tool]:
                     },
                     "additional_context": {
                         "type": "string",
-                        "description": "Optional additional context to use when generating the proposal JSON"
+                        "description": "Optional research findings about the client (e.g., online presence, website analysis, social media, industry insights) to include alongside the transcript"
                     },
                     "additional_context_path": {
                         "type": "string",
-                        "description": "Optional path to a local file containing additional context"
+                        "description": "Optional path to a file containing research findings about the client"
                     }
                 },
                 "required": ["transcript_text", "client_name"]
@@ -333,11 +333,11 @@ async def list_tools() -> list[Tool]:
                     },
                     "additional_context": {
                         "type": "string",
-                        "description": "Optional additional context to use when generating the proposal JSON"
+                        "description": "Optional research findings about the client (e.g., online presence, website analysis, social media, industry insights) to include alongside the transcript"
                     },
                     "additional_context_path": {
                         "type": "string",
-                        "description": "Optional path to a local file containing additional context"
+                        "description": "Optional path to a file containing research findings about the client"
                     }
                 },
                 "required": ["client_name", "transcript_text"]

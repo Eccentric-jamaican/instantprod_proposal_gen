@@ -100,8 +100,8 @@ SCHEMA & CONSTRAINTS (backend or other inputs will set `date`, `prepared_by`, an
 @click.option('--transcript', required=True, type=click.Path(exists=True), help='Path to transcript text file')
 @click.option('--model', default='gpt-5-nano', help='OpenAI model to use')
 @click.option('--output', default=None, help='Output JSON path')
-@click.option('--additional-context', default=None, help='Additional context to use when generating the proposal JSON')
-@click.option('--additional-context-path', default=None, type=click.Path(exists=True), help='Path to a file containing additional context')
+@click.option('--additional-context', default=None, help='Research findings about the client (e.g., online presence, website analysis, social media, industry insights)')
+@click.option('--additional-context-path', default=None, type=click.Path(exists=True), help='Path to a file containing research findings about the client')
 def main(transcript, model, output, additional_context, additional_context_path):
     """Analyze transcript and generate proposal data JSON."""
     
