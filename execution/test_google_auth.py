@@ -55,7 +55,7 @@ def get_credentials():
             flow = InstalledAppFlow.from_client_secrets_file(
                 str(CREDENTIALS_FILE), SCOPES
             )
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_local_server(port=0, access_type='offline', prompt='consent')
         
         # Save credentials for next time
         with open(TOKEN_FILE, 'w') as token:

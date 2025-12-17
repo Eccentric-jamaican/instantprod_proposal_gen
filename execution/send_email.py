@@ -32,15 +32,36 @@ SCOPES = [
     'https://www.googleapis.com/auth/gmail.send',
 ]
 
-def get_gmail_service():
+
+def _has_required_scopes(creds: Optional[Credentials], scopes: List[str]) -> bool:
+    if not creds:
+        return False
+    try:
+        # google.auth.credentials.Credentials
+        if hasattr(creds, "has_scopes"):
+            return bool(creds.has_scopes(scopes))
+    except Exception:
+        pass
+
+    existing = getattr(creds, "scopes", None)
+    if not existing:
+        return False
+    try:
+        return set(scopes).issubset(set(existing))
+    except Exception:
+        return False
+
+def get_gmail_service(force_reauth: bool = False):
     """Get authenticated Gmail service."""
     
     # Restore credentials to standard paths (or /tmp)
     creds_path, token_path = auth_helper.restore_credentials() # This handles Vercel /tmp logic
     
     creds = None
-    if token_path.exists():
+    if not force_reauth and token_path.exists():
         creds = Credentials.from_authorized_user_file(str(token_path), SCOPES)
+        if creds and not _has_required_scopes(creds, SCOPES):
+            creds = None
     
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -54,7 +75,7 @@ def get_gmail_service():
             flow = InstalledAppFlow.from_client_secrets_file(
                 str(creds_path), SCOPES
             )
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_local_server(port=0, open_browser=False, access_type='offline', prompt='consent')
         
         # Save refreshed token
         with open(token_path, 'w') as token:
@@ -126,7 +147,21 @@ def send_message(service, user_id, message):
         return message
     except HttpError as error:
         print(f"[FAIL] An error occurred: {error}")
-        return None
+        raise
+
+
+def _is_insufficient_gmail_scopes_error(err: HttpError) -> bool:
+    try:
+        status = getattr(getattr(err, "resp", None), "status", None)
+    except Exception:
+        status = None
+
+    text = str(err)
+    return status == 403 and (
+        "insufficientPermissions" in text
+        or "Insufficient Permission" in text
+        or "insufficient authentication scopes" in text
+    )
 
 def render_template(template_path: Path, replacements: dict) -> str:
     """Load HTML template and replace placeholders."""
@@ -223,7 +258,15 @@ def main(
         )
         
         print("Sending...")
-        send_message(service, 'me', message)
+        try:
+            sent = send_message(service, 'me', message)
+        except HttpError as e:
+            if _is_insufficient_gmail_scopes_error(e):
+                print("[INFO] Gmail permission missing. Re-authenticating with gmail.send scope...")
+                service = get_gmail_service(force_reauth=True)
+                sent = send_message(service, 'me', message)
+            else:
+                raise
         print("[OK] Email sent successfully!")
         
     except Exception as e:
